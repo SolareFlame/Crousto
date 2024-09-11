@@ -9,11 +9,10 @@ Crousto est un bot [Discord](https://discord.com) qui permet d'afficher automati
 > Pour ce faire, il suffit de réaliser la commande `/setup <#channel> <@role> (optional)`.
 
 # Commandes disponibles
-> [!TIP]
-> /help
-> /setup <#channel> <@role> (optional)
-> /update
-> /menu
+`/help` : Vous donne des informations sur le bots (notament la liste des commandes).
+`/setup <#channel> <@role> (optional)` : Inscrit le #channel et le @role (optionel) pour le menu quotidien.
+`/update` : Force la mise à jour du menu (menu.html).
+`/menu` : Force l'envoi du menu.
 
 
 
