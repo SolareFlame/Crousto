@@ -1,7 +1,6 @@
 const axios = require('axios');
 const fs = require('fs');
-const { url, reset_time } = require('../config.json');
-const { autoMenuSent } = require('../var.json');
+const { url, catch_time_start, catch_time_end } = require('../config.json');
 
 const { getData, getMenu, getDate } = require('./menu');
 const { sendMenu } = require("./commands.js");
@@ -14,58 +13,58 @@ async function updateMenu(){
     let new_date = getDate(getData(pageContent));
     let old_data = getDate(getData(fs.readFileSync("../menu.html", "utf-8")));
 
-    console.log(new_date);
-    console.log(old_data);
-
     if(new_date !== old_data){
         fs.writeFileSync("../menu.html", pageContent);
-        console.log("Updated menu data.");
+
         return true;
     } else {
-        console.log("Same date, Updating postponed.");
         return false;
     }
 }
 
 
-function startIntervalCheck()
+async function startIntervalCheck()
 {
-    let sent = autoMenuSent; // true is the menu has already been sent
+    let sent = false;
 
-    console.log("Lancement de la détection de l'heure...");
-    sent = checkTime(sent);
+    console.log("Starting interval check...");
+    sent = await checkTime(sent);
 
-    setInterval(() => {
-        sent = checkTime(sent);
+    setInterval(async () => {
+        sent = await checkTime(sent);
     }, 60000);
 }
 
-function checkTime(sent)
+async function checkTime(sent)
 {
     let now = new Date();
-    let reset = new Date("01/01/2000 " + reset_time);
+    let cts = new Date("01/01/2000 " + catch_time_start);
+    let cte = new Date("01/01/2000 " + catch_time_end);
 
-    console.log("LOGS: " + reset.getHours() + ":" + reset.getMinutes());
+    if(sent) console.log("Menu already sent. Waiting for reset sent flag. (At: " + cts.getHours() + ":" + cts.getMinutes() + ")");
 
-    if (now.getHours() >= reset.getHours() && now.getMinutes() >= reset.getMinutes() && !sent) {
-        sent = updateMenu(); // Update the menu and return true if the menu has been updated by Crous
+    if (now.getHours() >= cts.getHours() && now.getHours() <= cte.getHours() && !sent) {
+        let updated = await updateMenu();
+        console.log("Checking for update... (Crous updated ?: " + updated + ")");
 
-        if(sent) {
+        if(updated) {
             let list = loadServers();
             Object.values(list).forEach(server => {
                 sendMenu(server.channelID);
             });
 
-            fs.writeFileSync("../var.json", JSON.stringify({ autoMenuSent: true }, null, 2));
+            let log = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear() + " " + now.getHours() + ":" + now.getMinutes() + " - Menu sent.";
+            fs.appendFileSync("../logs.txt", log + "\n");
+
+            sent = true;
         }
     }
 
-    if (reset.getHours() === now.getHours() && reset.getMinutes() === (now.getMinutes() +1)) {
-        console.log("LOGS: Resetting found variable.");
-
+    if (cts.getHours() === now.getHours() && cts.getMinutes() === (now.getMinutes() +1)) {
+        console.log("Resetting sent flag.");
         sent = false;
-        fs.writeFileSync("../var.json", JSON.stringify({ autoMenuSent: false }, null, 2));
     }
+
     return sent;
 }
 

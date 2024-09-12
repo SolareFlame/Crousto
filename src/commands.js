@@ -5,7 +5,6 @@ const {loadServers} = require("./servers");
 
 async function sendMenu(cID, interaction) {
     try {
-        console.log("Nom du channel:", cID);
 
         const client = require('./bot.js');
         const channel = await client.channels.fetch(cID);
@@ -32,22 +31,23 @@ async function sendMenu(cID, interaction) {
             .setFooter({ text: 'CroustoBot by Solare', iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4' });
 
         let list = loadServers();
-        let roleID = list.find(server => server.channelID === cID).roleID;
-
+        let server = list.find(server => server.guildID === channel.guildId);
         let role;
-        if(roleID) role = "<@&" + roleID + ">";
-        else role = '@everyone';
 
-
+        if (server && server.roleID) {
+            role = "<@&" + server.roleID + ">";
+        } else {
+            role = "@everyone";
+        }
 
         if(interaction) {
             await interaction.reply({ content: role, embeds: [embed], allowedMentions: { parse: ["everyone"] } });
         } else {
             await channel.send({ content: role, embeds: [embed], allowedMentions: { parse: ["everyone"] } });
         }
-        console.log(`Menu envoyé dans le canal avec l'ID ${cID}.`);
+        console.log(`Menu send at: ${cID}.`);
     } catch (error) {
-        console.error('Erreur lors de l\'envoi du menu :', error);
+        console.error('Error sending menu:', error);
     }
 }
 
