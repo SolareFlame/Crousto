@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits, Events, EmbedBuilder } = require('discord.js');
 const { token } = require('../config.json');
 
-const { sendMenu } = require('./commands');
+const { sendMenu, sendHelp } = require('./commands');
 const { startIntervalCheck, updateMenu } = require('./update');
 const {saveServers, loadServers} = require("./servers");
 
@@ -25,6 +25,14 @@ client.on(Events.InteractionCreate, async interaction => {
     const { commandName } = interaction;
 
     if (commandName === 'menu') {
+        if(!interaction.member.permissions.has('ADMINISTRATOR')) {
+            interaction.reply({
+                content: "Vous devez être administrateur pour forcer l'envoi du menu.",
+                ephemeral: true
+            });
+            return
+        }
+
         let list = loadServers();
         let server = list.find(server => server.guildID === interaction.guildId);
         if(!server) {
@@ -38,6 +46,14 @@ client.on(Events.InteractionCreate, async interaction => {
     }
 
     if(commandName === 'setup') {
+        if(!interaction.member.permissions.has('ADMINISTRATOR')) {
+            interaction.reply({
+                content: "Vous devez être administrateur pour configurer le bot.",
+                ephemeral: true
+            });
+            return
+        }
+
         const channel = interaction.options.getChannel('channel');
         const role = interaction.options.getRole('role');
 
@@ -57,11 +73,23 @@ client.on(Events.InteractionCreate, async interaction => {
     }
 
     if(commandName === 'update') {
+        if(!interaction.member.permissions.has('ADMINISTRATOR')) {
+            interaction.reply({
+                content: "Vous devez être administrateur pour configurer le bot.",
+                ephemeral: true
+            });
+            return
+        }
+
         updateMenu();
         interaction.reply({
             content: "Mise à jour forcée réalisée.",
             ephemeral: true
         });
+    }
+
+    if(commandName === 'help') {
+        await sendHelp(interaction);
     }
 });
 

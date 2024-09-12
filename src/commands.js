@@ -51,4 +51,42 @@ async function sendMenu(cID, interaction) {
     }
 }
 
-module.exports = { sendMenu };
+
+async function sendHelp(interaction) {
+    try {
+        const embed = new EmbedBuilder()
+            .setColor(0xFFC832)
+            .setTitle('Aide')
+            .setDescription('Commandes disponibles:')
+            .addFields(
+                {
+                    name: '/help',
+                    value: "Vous donne des informations sur le bots (notament la liste des commandes).",
+                    inline: false
+                },
+                {
+                    name: '/setup <#channel> <@role> (optional)',
+                    value: "Inscrit le #channel et le @role (optionel) pour le menu quotidien.",
+                    inline: false
+                },
+                {
+                    name: '/update',
+                    value: "Force la mise à jour du menu (menu.html).",
+                    inline: false
+                },
+                {
+                    name: '/menu',
+                    value: "Force l'envoi du menu.",
+                    inline: false
+                }
+            )
+            .setTimestamp()
+            .setFooter({ text: 'CroustoBot by Solare', iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4' });
+
+        await interaction.reply({ embeds: [embed], ephemeral: true });
+    } catch (error) {
+        console.error('Error sending help:', error);
+    }
+}
+
+module.exports = { sendMenu, sendHelp };

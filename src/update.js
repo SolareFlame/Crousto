@@ -1,10 +1,10 @@
 const axios = require('axios');
 const fs = require('fs');
-const { url, catch_time_start, catch_time_end } = require('../config.json');
+const { url, catch_time_start, catch_time_end, update_time } = require('../config.json');
 
 const { getData, getMenu, getDate } = require('./menu');
 const { sendMenu } = require("./commands.js");
-const { loadSendList, loadServers} = require("./servers");
+const { loadServers} = require("./servers");
 
 async function updateMenu(){
     const response = await axios.get(url);
@@ -27,12 +27,12 @@ async function startIntervalCheck()
 {
     let sent = false;
 
-    console.log("Starting interval check...");
+    console.log("Starting interval check... (Every " + update_time + "ms)");
     sent = await checkTime(sent);
 
     setInterval(async () => {
         sent = await checkTime(sent);
-    }, 60000);
+    }, update_time);
 }
 
 async function checkTime(sent)
