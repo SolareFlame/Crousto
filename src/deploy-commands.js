@@ -29,6 +29,11 @@ const deployCommands = [
     new SlashCommandBuilder()
         .setName('update')
         .setDescription("Force la mise à jour du menu.")
+        .toJSON(),
+
+    new SlashCommandBuilder()
+        .setName('help')
+        .setDescription("Affiche le message d'aide.")
         .toJSON()
 ];
 const rest = new REST({ version: '10' }).setToken(token);
