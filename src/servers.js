@@ -5,12 +5,10 @@ function loadServers() {
         const fileData = fs.readFileSync("../servers.json", "utf-8");
         const sendListData = JSON.parse(fileData);
 
-        console.log(fileData);
-
         const servers = sendListData["servers"];
         return Object.values(servers);
     } catch (error) {
-        console.log("Erreur lors de la lecture de 'servers.json', fichier introuvable ou invalide.");
+        console.log("Error reading the file:", error);
         return [];
     }
 }
@@ -20,7 +18,7 @@ function saveServers(gID, cID, roleID) {
     try {
         fileData = JSON.parse(fs.readFileSync("../servers.json", 'utf-8'));
     } catch (error) {
-        console.log("Erreur lors de la lecture du fichier 'servers.json'.");
+        console.log("Error reading the file:", error);
     }
 
     if (!fileData.servers) {
@@ -46,13 +44,11 @@ function saveServers(gID, cID, roleID) {
         };
     }
 
-    console.log(fileData);
-
     try {
         fs.writeFileSync("../servers.json", JSON.stringify(fileData, null, 2));
-        console.log("Données mises à jour avec succès !");
+        console.log("New data saved to 'servers.json'.");
     } catch (error) {
-        console.log("Erreur lors de la sauvegarde du fichier 'servers.json'.", error);
+        console.log("Error writing the file:", error);
     }
 }
 
