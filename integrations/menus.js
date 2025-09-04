@@ -26,7 +26,6 @@ async function fetchMenu(restaurant_id) {
         let data = await res.json();
 
         if (!Array.isArray(data)) return [];
-
         return data;
     } catch (err) {
         console.error('menuService: fetch_menus_raw error=', err.message || err);

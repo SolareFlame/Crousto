@@ -1,11 +1,31 @@
 const { fetchMenu } = require('../../integrations/menus');
 
 /**
+ * @typedef {Object} MenuFood
+ * @property {string} name
+ * @property {string[]} dishes
+ */
+
+/**
+ * @typedef {Object} MenuMeal
+ * @property {string} name
+ * @property {MenuFood[]} foodcategory
+ */
+
+/**
+ * @typedef {Object} Menu
+ * @property {number} id
+ * @property {string} date
+ * @property {MenuMeal[]} meal
+ */
+
+
+/**
  * Retourne le menu d'un restaurant pour une date ISO (YYYY-MM-DD).
  *
  * @param {string|number} restaurant_id
  * @param date
- * @returns {Promise<object|null>} l’objet jour { date, meal: [...] } ou null
+ * @returns {Promise<Menu|null>}
  */
 async function getMenu(restaurant_id, date = getTodayDate()){
     if (!date) throw new Error('date format ISO requis (YYYY-MM-DD)');
@@ -22,7 +42,7 @@ async function getMenu(restaurant_id, date = getTodayDate()){
  * @param {string|number} restaurant_id
  * @param {string} date
  * @param {string} meal_name
- * @returns {Promise<object|null>} { name, foodcategory: [...] } ou null
+ * @returns {Promise<Meal|null>}
  */
 async function getMeal(restaurant_id, date, meal_name) {
     /**
