@@ -15,7 +15,7 @@ async function fetchMenu(restaurant_id) {
         throw new Error('restaurant_id needed.');
     }
 
-    const url = `${config.api_univ.url}${config.api_univ.endpoints.restaurants.endpoint}?id=${encodeURIComponent(restaurant_id)}`;
+    const url = `${config.api_univ.url}${config.api_univ.endpoints.menus.endpoint}?id=${encodeURIComponent(restaurant_id)}`;
 
     try {
         const res = await fetch(url);
