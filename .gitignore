@@ -5,7 +5,7 @@ node_modules/
 test/
 old/
 
-src/.env
+old/.env
 locations.json
 sendList.json
 restaurants.json
