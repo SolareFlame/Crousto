@@ -2,7 +2,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { config } = require('dotenv');
 const path = require('path');
 const { readdirSync } = require('fs');
-const { loadFile } = require('./utils/loadmd');
+const { loadFile } = require('./utils/md_loader');
 
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
@@ -77,6 +77,7 @@ async function loadCommands(app_id) {
 
         commands_json.push(command.data.toJSON());
     }
+
 
     await rest.put(
         Routes.applicationGuildCommands(app_id, process.env.DEV_GUILD_ID),
