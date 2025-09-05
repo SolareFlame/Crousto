@@ -14,5 +14,10 @@
         ]
       }
     }
+  },
+  "visuals": {
+    "colors": {
+      "primary": "0xFAAF18"
+    }
   }
 }
