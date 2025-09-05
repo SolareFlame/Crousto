@@ -1,4 +1,4 @@
-const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 /** @type {Config} */
 const config = require('../../config/config.json');
@@ -6,9 +6,9 @@ const config = require('../../config/config.json');
 async function renderInfo(restaurant) {
     const embed = new EmbedBuilder()
         .setAuthor({
-            name: process.env.DISCORD_BOT_NAME,
-            url: process.env.GITHUB_URL,
-            iconURL: process.env.LOGO_1_URL
+            name: config.data.bot_name,
+            url: config.data.github_url,
+            iconURL: config.visuals.logos.default,
         })
         .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
         .setTitle('Information sur ' + restaurant.title)
@@ -22,7 +22,7 @@ async function renderInfo(restaurant) {
             value: `${restaurant.name}\n${restaurant.phone}`,
             inline: true
         }, {
-            name: 'EDT',
+            name: 'Ouverture',
             value: "```" +
                 `Lundi:    ${restaurant.opening[1].label}\n` +
                 `Mardi:    ${restaurant.opening[2].label}\n` +
@@ -38,9 +38,13 @@ async function renderInfo(restaurant) {
         .setThumbnail('\n' + restaurant.thumbnailUrl)
         .setTimestamp()
         .setFooter({
-            text: `${process.env.DISCORD_BOT_NAME} by Solare`,
+            text: `${config.data.bot_name} by Solare`,
             iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4'
         });
+
+    return {
+        embeds: [embed]
+    }
 }
 
 module.exports = { renderInfo };
