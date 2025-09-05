@@ -1,25 +1,33 @@
 const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
 
+/** @type {Config} */
+const config = require('../../config/config.json');
+const {renderDate} = require("../../utils/date_loader");
+const {formatMenu} = require("../data/menuService");
+
+/**
+ * Génère un message Discord avec le menu du jour d'un restaurant.
+ *
+ * @param restaurant
+ * @param menu
+ * @returns {Promise<{embeds: EmbedBuilder[], components: ActionRowBuilder<AnyComponentBuilder>[]}>}
+ */
 async function renderMenu(restaurant, menu) {
-
-    console.log("RESTAURANT: " + restaurant);
-    console.log("MENU: " + menu);
-
     const embedRestaurant = new EmbedBuilder()
         .setAuthor({
             name: process.env.DISCORD_BOT_NAME,
             url: process.env.GITHUB_URL,
             iconURL: process.env.LOGO_1_URL
         })
-        .setColor(0xFAAF18)
+        .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
         .setTitle(restaurant.title)
         .setDescription(restaurant.shortDesc + '\n' + '[Location](https://www.google.com/maps/search/?api=1&query=' + restaurant.latitude + ',' + restaurant.longitude + ')')
         .setThumbnail(restaurant.thumbnailUrl);
 
     const embedMenu = new EmbedBuilder()
-        .setColor(0xFAAF18)
-        .setTitle('Menu du ' + date)
-        .setDescription(menu)
+        .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
+        .setTitle('Menu du ' + renderDate(menu.date))
+        .setDescription(formatMenu(menu))
         .setTimestamp()
         .setFooter({
             text: `${process.env.DISCORD_BOT_NAME} by Solare`,
@@ -27,7 +35,7 @@ async function renderMenu(restaurant, menu) {
         });
 
     const button = new ButtonBuilder()
-        .setCustomId('info_' + id)
+        .setCustomId('info_' + restaurant.id)
         .setLabel('Plus d\'infos')
         .setStyle(ButtonStyle.Secondary);
 

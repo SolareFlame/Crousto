@@ -1,4 +1,5 @@
 const { fetchMenu } = require('../../integrations/menus');
+const { getTodayDate } = require('../../utils/date_loader');
 
 /**
  * @typedef {Object} MenuFood
@@ -27,24 +28,25 @@ const { fetchMenu } = require('../../integrations/menus');
  * @param date
  * @returns {Promise<Menu|null>}
  */
-async function getMenu(restaurant_id, date = getTodayDate()){
+async function getMenuDay(restaurant_id, date = getTodayDate()){
     if (!date) throw new Error('date format ISO requis (YYYY-MM-DD)');
 
     const rows = await fetchMenu(restaurant_id);
     const found = rows.find(r => r.date === date);
+
     return found || null;
 }
 
 
 /**
- * Retourne un "repas" (midi || soir) pour une date donnée.
+ * Retourne le menu avec le contenu du repas directement spécifié dans "menu.meal".
  *
- * @param {string|number} restaurant_id
- * @param {string} date
+ * @param restaurant_id
  * @param {string} meal_name
+ * @param date
  * @returns {Promise<Meal|null>}
  */
-async function getMeal(restaurant_id, date, meal_name) {
+async function getMenu(restaurant_id, meal_name, date = getTodayDate()) {
     /**
      * @typedef {Object} Menu
      * @property {string} date
@@ -53,39 +55,44 @@ async function getMeal(restaurant_id, date, meal_name) {
      *
      * @typedef {Object} Meal
      * @property {string} name
-     * @property {string[]} foodcategory
+     * @property {FoodCategory[]} foodcategory
+     *
+     * @typedef {Object} FoodCategory
+     * @property {string} names
+     * @property {string[]} dishes
      */
 
-    /** @type {Menu} */
-    const menu = await getMenu(restaurant_id, date);
+    const menu = await getMenuDay(restaurant_id, date);
     if (!menu || !Array.isArray(menu.meal)) return null;
 
     const wanted = meal_name.trim().toLowerCase();
-    const found = menu.meal.find(m => m.name.trim().toLowerCase() === wanted);
+    const found = menu.meal.filter(m => m.name.trim().toLowerCase() === wanted);
+    if (!found) return null;
 
-    return found || null;
+    menu.meal = found;
+
+    return menu;
 }
-
 
 /**
- * Retourne la date d’aujourd’hui au format ISO (YYYY-MM-DD).
+ * Formate un menu pour Discord à partir de l'objet
+ *
+ * @returns {string} - Menu formaté en string.
+ * @param menu
  */
-function getTodayDate() {
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = `${d.getMonth() + 1}`.padStart(2, '0');
-    const day = `${d.getDate()}`.padStart(2, '0');
+function formatMenu(menu) {
+    console.log("row menu: " + JSON.stringify(menu));
 
-    return `${y}-${m}-${day}`;
+    if(!menu || !menu.meal[0].foodcategory) return 'Aucun menu disponible';
+
+    return menu.meal[0].foodcategory
+        .map(category => {
+            const dishes = category.dishes
+                .filter(d => d.trim() !== '')
+                .join('\n');
+            return `**${category.name}**\n${dishes}`;
+        })
+        .join('\n\n');
 }
 
-
-/**
- * Retourne une date formatée en français.
- */
-function renderDate(date) {
-    const options = { weekday: 'long', month: 'long', day: 'numeric' };
-    const d = new Date(date);
-
-    return d.toLocaleDateString('fr-FR', options);
-}
+module.exports = { getMenu, formatMenu };
