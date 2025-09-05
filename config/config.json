@@ -18,6 +18,13 @@
   "visuals": {
     "colors": {
       "primary": "0xFAAF18"
+    },
+    "logos": {
+      "default": "https://raw.githubusercontent.com/SolareFlame/Crousto/v3/res/logos/logo_colored_fill.png",
     }
+  },
+  "data": {
+    "bot_name": "Crousto",
+    "github_url": "https://github.com/SolareFlame/Crousto"
   }
 }
