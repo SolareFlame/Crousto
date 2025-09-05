@@ -1,4 +1,5 @@
 const { fetchRestaurants } = require('../../integrations/restaurants');
+const cheerio = require('cheerio');
 
 /**
  * @typedef {Object} Restaurant
@@ -12,6 +13,10 @@ const { fetchRestaurants } = require('../../integrations/restaurants');
  * @property {number} longitude
  * @property {string} thumbnailUrl
  * @property {string} shortDesc.
+ *
+ * @property {string} name
+ * @property {string} address
+ * @property {string} phone
  */
 
 /**
@@ -29,7 +34,25 @@ const { fetchRestaurants } = require('../../integrations/restaurants');
  */
 async function getRestaurant(id) {
     const list = await filterRestaurants();
-    return list.find(r => r.id === id) ?? null;
+    let restaurant = list.find(r => r.id === parseInt(id)) ?? null;
+
+    if(!restaurant) return null;
+
+    const $ = cheerio.load(restaurant.contact);
+    const name = $('h2').first().text();
+
+    const paragraph = $('p').first().text();
+    const address = paragraph.split('Tél')[0].trim();
+
+    const phoneMatch = paragraph.match(/Tél\s*:?\s*([0-9 .]+)/);
+    const phone = phoneMatch ? phoneMatch[1].trim() : 'Non trouvé';
+
+    return {
+        ...restaurant,
+        name,
+        address,
+        phone
+    };
 }
 /**
  * Supprime des restaurants considérés comme non pertinents.
@@ -55,3 +78,4 @@ async function filterRestaurants() {
     return filtered;
 }
 
+module.exports = { filterRestaurants, getRestaurant };
