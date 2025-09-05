@@ -2,15 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * @typedef {Object} ApiEndpoint
- * @property {string} endpoint
- * @property {string[]} [params]
- */
-
-/**
- * @typedef {Object} ApiUnivEndpoints
- * @property {ApiEndpoint} restaurants
- * @property {ApiEndpoint} menus
+ * @typedef {Object} Config
+ * @property {ApiUniv} api_univ
+ * @property {Visuals} visuals
  */
 
 /**
@@ -20,13 +14,34 @@ const path = require('path');
  */
 
 /**
- * @typedef {Object} Config
- * @property {ApiUniv} api_univ
+ * @typedef {Object} ApiUnivEndpoints
+ * @property {ApiEndpoint} restaurants
+ * @property {ApiEndpoint} menus
  */
 
-/** @type {Config} */
+/**
+ * @typedef {Object} ApiEndpoint
+ * @property {string} endpoint
+ * @property {string[]} [params]
+ */
+
+/**
+ * @typedef {Object} Visuals
+ * @property {Colors} colors
+ */
+
+/**
+ * @typedef {Object} Colors
+ * @property {string} primary
+ * @property {string} secondary
+ */
+
 const config = loadConfig();
 
+/**
+ * Load configuration from config.json file.
+ * @returns {Config} The configuration object.
+ */
 function loadConfig() {
     const config_path = path.join(__dirname, '..', 'config', 'config.json');
 
@@ -44,4 +59,4 @@ function loadConfig() {
     return file_config;
 }
 
-module.exports = { config };
+module.exports = {config};
