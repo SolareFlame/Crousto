@@ -15,9 +15,9 @@ const {formatMenu} = require("../data/menuService");
 async function renderMenu(restaurant, menu) {
     const embedRestaurant = new EmbedBuilder()
         .setAuthor({
-            name: process.env.DISCORD_BOT_NAME,
-            url: process.env.GITHUB_URL,
-            iconURL: process.env.LOGO_1_URL
+            name: config.data.bot_name,
+            url: config.data.github_url,
+            iconURL: config.visuals.logos.default,
         })
         .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
         .setTitle(restaurant.title)
@@ -30,7 +30,7 @@ async function renderMenu(restaurant, menu) {
         .setDescription(formatMenu(menu))
         .setTimestamp()
         .setFooter({
-            text: `${process.env.DISCORD_BOT_NAME} by Solare`,
+            text: `${config.data.bot_name} by Solare`,
             iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4'
         });
 

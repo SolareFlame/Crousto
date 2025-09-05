@@ -1,9 +1,7 @@
-const {SlashCommandBuilder, EmbedBuilder} = require('discord.js');
-
-const {safeReply} = require('../events/interactionCreate');
+const {SlashCommandBuilder} = require('discord.js');
 
 const {filterRestaurants, getRestaurant} = require('../services/data/restaurantService');
-const {getMenu, formatMenu} = require('../services/data/menuService');
+const {getMenu} = require('../services/data/menuService');
 
 const {renderMenu} = require('../services/message/menuMessage');
 
