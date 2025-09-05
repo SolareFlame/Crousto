@@ -5,6 +5,7 @@ const path = require('path');
  * @typedef {Object} Config
  * @property {ApiUniv} api_univ
  * @property {Visuals} visuals
+ * @property {Data} data
  */
 
 /**
@@ -28,12 +29,24 @@ const path = require('path');
 /**
  * @typedef {Object} Visuals
  * @property {Colors} colors
+ * @property {Logos} logos
  */
 
 /**
  * @typedef {Object} Colors
  * @property {string} primary
  * @property {string} secondary
+ */
+
+/**
+ * @typedef {Object} Logos
+ * @property {string} default
+ */
+
+/**
+ * @typedef {Object} Data
+ * @property {string} bot_name
+ * @property {string} github_url
  */
 
 const config = loadConfig();
