@@ -10,7 +10,7 @@ const {formatMenu} = require("../data/menuService");
  *
  * @param restaurant
  * @param menu
- * @returns {Promise<{embeds: EmbedBuilder[], components: ActionRowBuilder<AnyComponentBuilder>[]}>}
+ * @returns {Promise<{embeds: EmbedBuilder[], components: ActionRowBuilder[]}>}
  */
 async function renderMenu(restaurant, menu) {
     const embedRestaurant = new EmbedBuilder()
@@ -47,4 +47,4 @@ async function renderMenu(restaurant, menu) {
     }
 }
 
-module.exports = {renderMenu};
+module.exports = { renderMenu };
