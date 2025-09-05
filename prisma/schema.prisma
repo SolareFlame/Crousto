@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id           Int     @id
+  title        String
+  zone         String?
+  latitude     Float?
+  longitude    Float?
+  thumbnailUrl String?
+  shortDesc    String?
+  contactHtml  String? @map("contact")
+  infosHtml    String? @map("infos")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menus         Menu[]
+  subscriptions Subscription[]
+  plannings     Planning[]
+
+  @@index([title])
+  @@index([zone])
+}
+
+model Planning {
+  id           String  @id @default(cuid())
+  restaurantId Int
+  weekday      Int
+  isOpen       Boolean
+  label        String?
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([restaurantId, weekday])
+  @@index([weekday])
+}
+
+model Menu {
+  id           String @id @default(cuid())
+  restaurantId Int
+
+  date      DateTime
+  sourceId  Int?
+  json      Json
+  hash      String
+  fetchedAt DateTime @default(now())
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  meals      Meal[]
+
+  @@unique([restaurantId, date])
+  @@index([date])
+  @@index([restaurantId, fetchedAt])
+}
+
+/**
+ * API STRUCTURE: A meal corresponds to a meal in a day (in Menu)
+ */
+model Meal {
+  id       String @id @default(cuid())
+  menuId   String
+  name     String
+  position Int
+
+  menu       Menu       @relation(fields: [menuId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categories Category[]
+
+  @@unique([menuId, name])
+  @@index([menuId, position])
+}
+
+/**
+ * API STRUCTURE: A category corresponds to a section of a meal (in Meal)
+ */
+model Category {
+  id       String @id @default(cuid())
+  mealId   String
+  label    String
+  position Int
+
+  meal   Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  dishes Dish[]
+
+  @@index([label])
+  @@index([mealId, position])
+}
+
+/**
+ * API STRUCTURE: A dish corresponds to a plate of a category (in Category)
+ */
+model Dish {
+  id         String @id @default(cuid())
+  categoryId String
+  label      String
+  position   Int
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([label])
+  @@index([categoryId, position])
+}
+
+model Guild {
+  id   String  @id
+  name String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id            String    @id @default(cuid())
+  guildId       String
+  channelId     String
+  restaurantId  Int
+  timezone      String    @default("Europe/Paris")
+  cron          String
+  active        Boolean   @default(true)
+  lastRunAt     DateTime?
+  lastMessageId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  guild      Guild      @relation(fields: [guildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([guildId, channelId, restaurantId])
+  @@index([active, cron])
+  @@index([guildId, channelId])
+}
