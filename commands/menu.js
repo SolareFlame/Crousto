@@ -1,9 +1,10 @@
 const {SlashCommandBuilder} = require('discord.js');
 
-const {filterRestaurants, getRestaurant} = require('../services/data/restaurantService');
+const {getRestaurant} = require('../services/data/restaurantService');
 const {getMenu} = require('../services/data/menuService');
 
 const {renderMenu} = require('../services/message/menuMessage');
+const {getAllRestaurants} = require("../services/data/restaurantService");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -26,12 +27,12 @@ module.exports = {
         ),
 
     async autocomplete(interaction) {
-        const restaurants = await filterRestaurants();
+        const restaurants = await getAllRestaurants();
         const focused = interaction.options.getFocused();
 
         const choices = restaurants.map(r => ({
             name: r.title,
-            value: String(r.id),
+            value: String(r.sourceId),
         }));
 
         const filtered = choices.filter(choice =>
