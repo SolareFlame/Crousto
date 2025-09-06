@@ -6,6 +6,7 @@ const path = require('path');
  * @property {ApiUniv} api_univ
  * @property {Visuals} visuals
  * @property {Data} data
+ * @property {DbCache} db_cache
  */
 
 /**
@@ -49,6 +50,13 @@ const path = require('path');
  * @property {string} github_url
  */
 
+/**
+ * @typedef {Object} DbCache
+ * @property {number} menu_validity_time
+ * @property {number} restaurant_validity_time
+ */
+
+/** @type {Config} */
 const config = loadConfig();
 
 /**
