@@ -7,6 +7,8 @@ function getTodayDate() {
     const m = `${d.getMonth() + 1}`.padStart(2, '0');
     const day = `${d.getDate()}`.padStart(2, '0');
 
+    //return '2025-09-05';
+
     return `${y}-${m}-${day}`;
 }
 
@@ -14,8 +16,6 @@ function getTodayDate() {
  * Retourne une date formatée en français.
  */
 function renderDate(date) {
-    console.log("ROW DATE :", date);
-
     const options = { weekday: 'long', month: 'long', day: 'numeric' };
     const d = new Date(date);
 
