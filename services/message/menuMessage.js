@@ -2,6 +2,7 @@ const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('di
 
 /** @type {Config} */
 const config = require('../../config/config.json');
+
 const {renderDate} = require("../../utils/date_loader");
 const {formatMenu} = require("../data/menuService");
 
@@ -26,7 +27,7 @@ async function renderMenu(restaurant, menu) {
 
     const embedMenu = new EmbedBuilder()
         .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
-        .setTitle('Menu du ' + renderDate(menu.date))
+        .setTitle('Menu du ' + renderDate(menu?.date ?? renderDate(new Date())))
         .setDescription(formatMenu(menu))
         .setTimestamp()
         .setFooter({
