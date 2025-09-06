@@ -41,7 +41,7 @@ module.exports = {
         } catch (err) {
             console.error(err);
             await safeReply(interaction, {
-                content: 'Il y a eu une erreur lors du traitement.',
+                content: "**Crousto n'a pas réussi à exécuter cette demande.**\n Veuillez réessayer plus tard. \nSi le problème persiste, contactez @solaredev.",
                 ephemeral: true,
             });
         }
