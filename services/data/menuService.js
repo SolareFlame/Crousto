@@ -1,25 +1,6 @@
 const { fetchMenu } = require('../../integrations/menus');
 const { getTodayDate } = require('../../utils/date_loader');
-
-/**
- * @typedef {Object} MenuFood
- * @property {string} name
- * @property {string[]} dishes
- */
-
-/**
- * @typedef {Object} MenuMeal
- * @property {string} name
- * @property {MenuFood[]} foodcategory
- */
-
-/**
- * @typedef {Object} Menu
- * @property {number} id
- * @property {string} date
- * @property {MenuMeal[]} meal
- */
-
+const {findMenuByDate, setMenu} = require("../../db/menu");
 
 /**
  * Retourne le menu d'un restaurant pour une date ISO (YYYY-MM-DD).
@@ -47,52 +28,56 @@ async function getMenuDay(restaurant_id, date = getTodayDate()){
  * @returns {Promise<Meal|null>}
  */
 async function getMenu(restaurant_id, meal_name, date = getTodayDate()) {
-    /**
-     * @typedef {Object} Menu
-     * @property {string} date
-     * @property {number} id
-     * @property {Meal[]} meal
-     *
-     * @typedef {Object} Meal
-     * @property {string} name
-     * @property {FoodCategory[]} foodcategory
-     *
-     * @typedef {Object} FoodCategory
-     * @property {string} names
-     * @property {string[]} dishes
-     */
+    let menu = await findMenuByDate(restaurant_id, meal_name, date);
 
-    const menu = await getMenuDay(restaurant_id, date);
-    if (!menu || !Array.isArray(menu.meal)) return null;
+    // INSERT DB
+    if(menu === null) {
+        const menu_row = await getMenuDay(restaurant_id, date);
 
-    const wanted = meal_name.trim().toLowerCase();
-    const found = menu.meal.filter(m => m.name.trim().toLowerCase() === wanted);
-    if (!found) return null;
+        try {
+            if(menu_row) await setMenu(restaurant_id, menu_row);
+        } catch (error) {
+            console.error('Error saving menu to DB:', error);
+        }
 
-    menu.meal = found;
+        menu = await findMenuByDate(restaurant_id, meal_name, date);
+    }
 
+    if(!menu) return null;
     return menu;
 }
 
 /**
- * Formate un menu pour Discord à partir de l'objet
- *
- * @returns {string} - Menu formaté en string.
- * @param menu
+ * Formate un menu depuis la DB (include: meals.categories.dishes).
+ * @param {MenuDB|null} menu - Objet Menu Prisma.
+    * @param {string} meal_name - Nom du repas (optionnel).
+ * @returns {string}
  */
-function formatMenu(menu) {
-    console.log("row menu: " + JSON.stringify(menu));
+function formatMenu(menu, meal_name = 'midi') {
+    if(!menu) {
+        return 'Aucun menu disponible';
+    }
 
-    if(!menu || !menu.meal[0].foodcategory) return 'Aucun menu disponible';
+    const meal =
+        (meal_name
+            ? menu.meals.find(m => (m?.name || '').toLowerCase() === String(meal_name).toLowerCase())
+            : null) || menu.meals[0];
 
-    return menu.meal[0].foodcategory
-        .map(category => {
-            const dishes = category.dishes
-                .filter(d => d.trim() !== '')
-                .join('\n');
-            return `**${category.name}**\n${dishes}`;
-        })
-        .join('\n\n');
+    if (!meal || !Array.isArray(meal.categories) || meal.categories.length === 0) {
+        return 'Aucun menu disponible';
+    }
+
+    const blocks = meal.categories.map(cat => {
+        const title = (cat?.label ?? 'Sans intitulé').trim() || 'Sans intitulé';
+        const lines = (cat?.dishes ?? [])
+            .map(d => (d?.label ?? '').trim())
+            .filter(Boolean);
+
+        const body = lines.length ? lines.join('\n') : '—';
+        return `**${title}**\n${body}`;
+    });
+
+    return blocks.length ? blocks.join('\n\n') : 'Aucun menu disponible';
 }
 
 module.exports = { getMenu, formatMenu };
