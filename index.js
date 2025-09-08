@@ -96,11 +96,11 @@ async function loadCommands(app_id) {
  * @param {string} folder nom du dossier à charger (, 'buttons', 'selects', 'modals')
  */
 async function loadInteraction(client, folder) {
-    const folder_path = path.join(__dirname, 'interactions', folder);
+    const folder_path = path.join(__dirname, 'events', folder);
     const files = readdirSync(folder_path).filter(file => file.endsWith('.js'));
 
     for (const file of files) {
-        console.log(`- Loading ${folder} file "${file}"...`);
+        console.log(`- Starting: Loading ${folder}, file "${file}".`);
         const item = require(path.join(folder_path, file));
 
         switch (folder) {
@@ -117,5 +117,5 @@ async function loadInteraction(client, folder) {
                 console.warn(`Unknown folder type: ${folder}`);
         }
     }
-    console.log(`- All ${folder} loaded.`);
+    console.log(`Starting: All ${folder} loaded.`);
 }
