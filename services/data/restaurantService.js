@@ -39,12 +39,12 @@ async function getAllRestaurants() {
 }
 
 
-async function updateRestaurants() {
+async function updateRestaurants(_logs = false) {
     const items = await fetchRestaurants();
     for (const item of items) {
         try {
-            await setRestaurant(item);
-            console.log(`Upserted restaurant: ${item.title}`);
+            await setRestaurant(item, _logs);
+            if(_logs) console.log(`Upserted restaurant: ${item.title}`);
         } catch (error) {
             console.error(`Error upserting restaurant ${item.title}:`, error);
         }

@@ -71,9 +71,11 @@ async function findRestaurantBySourceId(rSourceId) {
 /**
  * Crée ou met à jour un restaurant et ses plannings.
  * @param {object} item - objet restaurant de l'API (voir exemple dans ton message)
+ * @param _logs {boolean} [true] - Activer/Désactiver les logs console
  */
-async function setRestaurant(item) {
-    console.log('DB called: ', 'setRestaurant');
+async function setRestaurant(item, _logs = false) {
+    if(_logs) console.log('DB called: ', 'setRestaurant');
+
     const sourceId = Number(item.id);
     const title = item.title ?? '';
     const zone = item.zone ?? null;
