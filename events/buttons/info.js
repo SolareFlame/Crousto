@@ -5,8 +5,6 @@ module.exports = {
     defer: 'reply',
     async execute(interaction) {
         const restaurant_id = interaction.customId.split(':')[1];
-        console.log("FOUND ID:" + restaurant_id)
-
         const restaurant = await getRestaurant(restaurant_id)
 
         const render = await renderInfo(restaurant);
