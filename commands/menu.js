@@ -19,7 +19,7 @@ module.exports = {
         .addStringOption(option =>
             option.setName('repas')
                 .setDescription('Repas du jour')
-                .setRequired(true)
+                .setRequired(false)
                 .addChoices(
                     {name: 'midi', value: 'midi'},
                     {name: 'soir', value: 'soir'}
@@ -44,7 +44,7 @@ module.exports = {
 
     async execute(interaction) {
         const restaurant_id = interaction.options.getString('id');
-        const meal_name = interaction.options.getString('repas');
+        const meal_name = interaction.options.getString('repas') ?? 'midi';
 
         const menu = await getMenu(restaurant_id, meal_name);
         const restaurant = await getRestaurant(restaurant_id)
