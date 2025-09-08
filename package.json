@@ -4,6 +4,7 @@
   "description": "Crousto V2",
   "author": "SolareFlame",
   "main": "old/index.js",
+  "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node old/index.js",
     "start": "node old/index.js"

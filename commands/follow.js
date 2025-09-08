@@ -6,7 +6,7 @@ for (let h = 8; h <= 21; h++) {
     heures.push({ name: `${h}h`, value: `${h}`});
 }
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('follow')
         .setDescription('Suivre le menu d\'un restaurant')

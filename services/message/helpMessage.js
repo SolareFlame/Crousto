@@ -1,5 +1,5 @@
 /** @type {Config} */
-import config from '/utils/config_loader.js';
+import { config } from '../../utils/config_loader.js';
 import {EmbedBuilder} from "discord.js";
 
 export async function renderHelp() {

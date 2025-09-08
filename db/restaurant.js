@@ -2,7 +2,7 @@ import {PrismaClient} from "@prisma/client";
 const prisma = new PrismaClient();
 
 import crypto from "crypto";
-import {config} from "/utils/config_loader.js";
+import {config} from "../utils/config_loader.js";
 
 /**
  * @typedef {Object} PlanningDB

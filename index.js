@@ -1,7 +1,12 @@
+import { fileURLToPath, pathToFileURL } from "url";
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
+
 import { Client, GatewayIntentBits, Collection } from "discord.js";
 import {config} from "dotenv";
 
-import path from "path";
 import { readdirSync } from "fs";
 
 import { REST } from "@discordjs/rest";
@@ -61,7 +66,15 @@ async function loadEvents() {
     for (const file of events_files) {
         console.log(`- Starting: Loading event file "${file}".`);
 
-        const event = await import(path.join(events_path, file));
+        const abs_path = path.join(events_path, file);
+        const file_url = pathToFileURL(abs_path).href;
+        const mod = await import(file_url);
+        const event = mod.default ?? mod;
+
+        if (!event?.name || typeof event.execute !== "function") {
+            console.warn(`Skip "${file}" (export invalide)`);
+            continue;
+        }
 
         if (event.once) {
             client.once(event.name, (...args) => event.execute(...args, client));
@@ -74,27 +87,31 @@ async function loadEvents() {
 }
 
 async function loadCommands(app_id) {
-    const commands_path = path.join(__dirname, 'commands');
-    const commands_files = readdirSync(commands_path).filter(file => file.endsWith('.js'));
+    const commands_path = path.join(__dirname, "commands");
+    const commands_files = readdirSync(commands_path).filter(f => f.endsWith(".js"));
 
     const commands_json = [];
 
     for (const file of commands_files) {
         console.log(`- Starting: Loading command file "${file}".`);
 
-        const command = require(path.join(commands_path, file));
-        client.commands.set(command.data.name, command);
+        const abs_path = path.join(commands_path, file);
+        const file_url = pathToFileURL(abs_path).href;
+        const mod = await import(file_url);
+        const command = mod.default ?? mod;
 
+        client.commands.set(command.data.name, command);
         commands_json.push(command.data.toJSON());
     }
 
     await rest.put(
         Routes.applicationGuildCommands(app_id, process.env.DEV_GUILD_ID),
-        {body: commands_json}
+        { body: commands_json }
     );
 
-    console.log('Starting: All commands loaded.');
+    console.log("Starting: All commands loaded.");
 }
+
 
 /**
  * Loader générique pour buttons, selects, modals
@@ -102,26 +119,40 @@ async function loadCommands(app_id) {
  * @param {string} folder nom du dossier à charger (, 'buttons', 'selects', 'modals')
  */
 async function loadInteraction(client, folder) {
-    const folder_path = path.join(__dirname, 'events', folder);
-    const files = readdirSync(folder_path).filter(file => file.endsWith('.js'));
+    const folder_path = path.join(__dirname, "events", folder);
+    const files = readdirSync(folder_path).filter(f => f.endsWith(".js"));
 
     for (const file of files) {
         console.log(`- Starting: Loading ${folder}, file "${file}".`);
-        const item = require(path.join(folder_path, file));
 
-        switch (folder) {
-            case 'buttons':
-                client.buttons.set(item.customId, item);
-                break;
-            case 'selects':
-                client.selects.set(item.customId, item);
-                break;
-            case 'modals':
-                client.modals.set(item.customId, item);
-                break;
-            default:
-                console.warn(`Unknown folder type: ${folder}`);
+        const abs_path = path.join(folder_path, file);
+        const file_url = pathToFileURL(abs_path).href;
+        const mod = await import(file_url);
+        const item = mod.default ?? mod;
+
+        const items = Array.isArray(item) ? item : [item];
+
+        for (const it of items) {
+            if (!it?.customId || typeof it.execute !== "function") {
+                console.warn(`Skip "${file}" (${folder} invalide: il faut .customId et .execute)`);
+                continue;
+            }
+
+            switch (folder) {
+                case "buttons":
+                    client.buttons.set(it.customId, it);
+                    break;
+                case "selects":
+                    client.selects.set(it.customId, it);
+                    break;
+                case "modals":
+                    client.modals.set(it.customId, it);
+                    break;
+                default:
+                    console.warn(`Unknown folder type: ${folder}`);
+            }
         }
     }
+
     console.log(`Starting: All ${folder} loaded.`);
 }

@@ -1,5 +1,5 @@
 /** @type {Config} */
-import config from '/utils/config_loader.js';
+import { config } from '../../utils/config_loader.js';
 import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder} from "discord.js";
 
 
@@ -10,7 +10,7 @@ import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder} from "discor
  * @param menu
  * @returns {Promise<{embeds: EmbedBuilder[], components: ActionRowBuilder[]}>}
  */
-async function renderMenu(restaurant, menu) {
+export async function renderMenu(restaurant, menu) {
     const embedRestaurant = new EmbedBuilder()
         .setAuthor({
             name: config.data.bot_name,

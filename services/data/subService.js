@@ -1,11 +1,11 @@
 import cron from "node-cron";
 
 /** @type {Config} */
-import {config} from "../../utils/config_loader.js";
-import {addSubscription, getSubscriptionsForHour, removeSubscription} from "../../db/subscriptions";
-import {getMenu} from "./menuService";
-import {getRestaurant} from "./restaurantService";
-import {renderMenu} from "../message/menuMessage";
+import { config } from "../../utils/config_loader.js";
+import {addSubscription, getSubscriptionsForHour, removeSubscription} from "../../db/subscriptions.js";
+import { getMenu } from "./menuService.js";
+import { getRestaurant } from "./restaurantService.js";
+import { renderMenu } from "../message/menuMessage.js";
 
 /**
  * Follow a restaurant's menu

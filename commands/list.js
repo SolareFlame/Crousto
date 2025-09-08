@@ -1,6 +1,6 @@
 import {SlashCommandBuilder} from "discord.js";
 import {getAllRestaurants} from "../services/data/restaurantService.js";
-import {renderListe} from "../services/message/listMessage.js";
+import { renderList } from "../services/message/listMessage.js";
 
 
 export default {
@@ -11,7 +11,7 @@ export default {
     async execute(interaction) {
         const restaurants = await getAllRestaurants()
 
-        const render = await renderListe(restaurants);
+        const render = await renderList(restaurants);
         await interaction.editReply(render);
     },
 };

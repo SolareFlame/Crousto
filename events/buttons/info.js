@@ -1,6 +1,7 @@
-const {renderInfo} = require("../../services/message/infoMessage");
-const {getRestaurant} = require("../../services/data/restaurantService");
-module.exports = {
+import {renderInfo} from "../../services/message/infoMessage.js";
+import {getRestaurant} from "../../services/data/restaurantService.js";
+
+export default {
     customId: 'info',
     defer: 'reply',
     async execute(interaction) {

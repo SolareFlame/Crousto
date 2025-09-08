@@ -1,6 +1,5 @@
 /** @type {Config} */
-import {config} from "/utils/config_loader.js";
-import cheerio from "cheerio";
+import {config} from "../utils/config_loader.js";
 
 /**
  * Récupère la liste des restaurants depuis l'API

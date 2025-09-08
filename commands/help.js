@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import {renderHelp} from "../services/message/helpMessage.js";
+import { renderHelp } from "../services/message/helpMessage.js";
 
 export default {
     data: new SlashCommandBuilder()

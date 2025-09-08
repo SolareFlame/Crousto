@@ -1,7 +1,7 @@
 /** @type {Config} */
-import config from '/utils/config_loader.js';
-import {EmbedBuilder} from "discord.js";
-import {parseHtml} from "/utils/data_extractor.js";
+import { config } from '../../utils/config_loader.js';
+import { EmbedBuilder } from "discord.js";
+import { parseHtml } from "../../utils/data_extractor.js";
 
 export async function renderInfo(restaurant) {
     const embed = new EmbedBuilder()
