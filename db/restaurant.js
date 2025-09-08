@@ -33,7 +33,6 @@ const {extractAddress, extractPhone} = require("../utils/data_extractor");
  * @property {PlanningDB[]} [plannings]
  */
 
-
 /**
  * Retourne tous les restaurants avec leurs plannings.
  * @returns {Promise<RestaurantDB[]>}
@@ -54,8 +53,8 @@ async function findAllRestaurants() {
  * @param rSourceId
  * @returns {Promise<RestaurantDB>}
  */
-async function findRestaurantById(rSourceId) {
-    console.log('DB called: ', 'findRestaurantById');
+async function findRestaurantBySourceId(rSourceId) {
+    console.log('DB called: ', 'findRestaurantBySourceId');
 
     const ttl = Number(config.db_cache.restaurant_validity_time);
     const threshold = new Date(Date.now() - ttl * 1000);
@@ -148,4 +147,4 @@ async function setRestaurant(item) {
     });
 }
 
-module.exports = { findAllRestaurants, findRestaurantById, setRestaurant };
+module.exports = { findAllRestaurants, findRestaurantBySourceId, setRestaurant };

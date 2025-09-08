@@ -1,4 +1,4 @@
-const {findRestaurantById, setRestaurant, findAllRestaurants} = require("../../db/restaurant");
+const {findRestaurantBySourceId, setRestaurant, findAllRestaurants} = require("../../db/restaurant");
 const { fetchRestaurants } = require('../../integrations/restaurants');
 
 /**
@@ -8,7 +8,7 @@ const { fetchRestaurants } = require('../../integrations/restaurants');
  * @returns {Promise<RestaurantDB|null>}
  */
 async function getRestaurant(sourceId) {
-    let restaurant = await findRestaurantById(sourceId)
+    let restaurant = await findRestaurantBySourceId(sourceId)
 
     // INSERT DB
     if(restaurant === null) {
@@ -21,7 +21,7 @@ async function getRestaurant(sourceId) {
             console.error('Error saving restaurant to DB:', error);
         }
 
-        restaurant = await findRestaurantById(sourceId);
+        restaurant = await findRestaurantBySourceId(sourceId);
     }
 
     if(!restaurant) return null;

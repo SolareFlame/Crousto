@@ -57,8 +57,8 @@ const {config} = require("../utils/config_loader");
  * @param {number|string} sourceId
  * @returns {Promise<MenuDB|null>}
  */
-async function findMenuById(sourceId) {
-    console.log('DB called: ', 'findMenuById');
+async function findMenuBySourceId(sourceId) {
+    console.log('DB called: ', 'findMenuBySourceId');
 
     const ttl = Number(config.db_cache.menu_validity_time);
     const threshold = new Date(Date.now() - ttl * 1000);
@@ -203,4 +203,4 @@ async function setMenu(rSourceId, item) {
 }
 
 
-module.exports = { findMenuById, findMenuByDate, setMenu };
+module.exports = { findMenuBySourceId, findMenuByDate, setMenu };
