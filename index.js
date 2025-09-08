@@ -2,10 +2,12 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { config } = require('dotenv');
 const path = require('path');
 const { readdirSync } = require('fs');
-const { loadFile } = require('./utils/md_loader');
 
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
+
+const {updateRestaurants} = require("./services/data/restaurantService");
+const { loadFile } = require('./utils/md_loader');
 
 config();
 
@@ -25,7 +27,7 @@ client.buttons  = new Collection();
 client.selects  = new Collection();
 client.modals   = new Collection();
 
-client.once('ready', async () => {
+client.once('clientReady', async () => {
     const banner = loadFile('banner');
     if (banner) console.log(banner);
 
@@ -35,13 +37,14 @@ client.once('ready', async () => {
 
         await loadEvents();
         await loadCommands(application_id);
+
+        await updateRestaurants();
     } catch (error) {
         console.error('Stating: ERROR=', error);
     }
 });
 
 client.login(process.env.DISCORD_TOKEN).catch(console.error);
-
 
 
 async function loadEvents() {

@@ -2,6 +2,7 @@ const {EmbedBuilder} = require('discord.js');
 
 /** @type {Config} */
 const config = require('../../config/config.json');
+const {parseHtml} = require("../../utils/data_extractor");
 
 async function renderInfo(restaurant) {
     const embed = new EmbedBuilder()
@@ -13,34 +14,34 @@ async function renderInfo(restaurant) {
         .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
         .setTitle('Information sur ' + restaurant.title)
         .setDescription(restaurant.shortDesc)
-        .addFields({
-            name: 'Localisation',
-            value: `[${restaurant.address}](https://www.google.com/maps/search/?api=1&query=${restaurant.latitude},${restaurant.longitude})`,
-            inline: true
-        }, {
-            name: 'Contact',
-            value: `${restaurant.name}\n${restaurant.phone}`,
-            inline: true
-        }, {
-            name: 'Ouverture',
-            value: "```" +
-                `Lundi:    ${restaurant.opening[1].label}\n` +
-                `Mardi:    ${restaurant.opening[2].label}\n` +
-                `Mercredi: ${restaurant.opening[3].label}\n` +
-                `Jeudi:    ${restaurant.opening[4].label}\n` +
-                `Vendredi: ${restaurant.opening[5].label}\n` +
-                `Samedi:   ${restaurant.opening[6].label}\n` +
-                `Dimanche: ${restaurant.opening[7].label}` +
-                "```",
-            inline: false
-        })
-
         .setThumbnail('\n' + restaurant.thumbnailUrl)
         .setTimestamp()
         .setFooter({
             text: `${config.data.bot_name} by Solare`,
             iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4'
-        });
+        })
+
+    parseHtml(restaurant.infosHtml).sections.forEach(s => {
+        embed.addFields({ name: s.title, value: s.content, inline: true });
+    });
+    parseHtml(restaurant.contactHtml).sections.forEach(s => {
+        embed.addFields({ name: s.title, value: s.content, inline: true });
+    });
+
+
+    embed.addFields({
+        name: 'Ouverture',
+        value: "```" +
+            `Lundi:    ${restaurant.plannings[0].label}\n` +
+            `Mardi:    ${restaurant.plannings[1].label}\n` +
+            `Mercredi: ${restaurant.plannings[2].label}\n` +
+            `Jeudi:    ${restaurant.plannings[3].label}\n` +
+            `Vendredi: ${restaurant.plannings[4].label}\n` +
+            `Samedi:   ${restaurant.plannings[5].label}\n` +
+            `Dimanche: ${restaurant.plannings[6].label}` +
+            "```",
+        inline: false
+    })
 
     return {
         embeds: [embed]

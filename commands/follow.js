@@ -6,10 +6,15 @@ const {getMenu} = require('../services/data/menuService');
 const {renderMenu} = require('../services/message/menuMessage');
 const {getAllRestaurants} = require("../services/data/restaurantService");
 
+const heures = [];
+for (let h = 8; h <= 21; h++) {
+    heures.push({ name: `${h}h`, value: `${h}`});
+}
+
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('menu')
-        .setDescription('Affiche le menu du jour')
+        .setName('follow')
+        .setDescription('Suivre le menu d\'un restaurant')
         .addStringOption(option =>
             option.setName('id')
                 .setDescription('ID du restaurant')
@@ -17,13 +22,15 @@ module.exports = {
                 .setAutocomplete(true)
         )
         .addStringOption(option =>
-            option.setName('repas')
-                .setDescription('Repas du jour')
+            option.setName('heure')
+                .setDescription('Heure de la notification')
+                .setRequired(true)
+                .addChoices(...heures)
+        )
+        .addRoleOption(option =>
+            option.setName('role')
+                .setDescription('Rôle à mentionner lors de la notification')
                 .setRequired(false)
-                .addChoices(
-                    {name: 'midi', value: 'midi'},
-                    {name: 'soir', value: 'soir'}
-                )
         ),
 
     async autocomplete(interaction) {
@@ -44,12 +51,13 @@ module.exports = {
 
     async execute(interaction) {
         const restaurant_id = interaction.options.getString('id');
-        const meal_name = interaction.options.getString('repas') ?? 'midi';
+        const heure = interaction.options.getString('heure');
+        const role = interaction.options.getRole('role');
 
-        const menu = await getMenu(restaurant_id, meal_name);
-        const restaurant = await getRestaurant(restaurant_id)
+        const channel_id = interaction.channelId;
+        const guild_id = interaction.guildId;
 
-        const render = await renderMenu(restaurant, menu);
+        //const render = TODO
         await interaction.editReply(render);
     },
 };

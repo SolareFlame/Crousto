@@ -25,6 +25,8 @@ async function fetchMenu(restaurant_id) {
         }
         let data = await res.json();
 
+        console.log('API called: ', url);
+
         if (!Array.isArray(data)) return [];
         return data;
     } catch (err) {

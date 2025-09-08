@@ -26,5 +26,9 @@
   "data": {
     "bot_name": "Crousto",
     "github_url": "https://github.com/SolareFlame/Crousto"
+  },
+  "db_cache" : {
+    "menu_validity_time": 60,
+    "restaurant_validity_time": 1440
   }
 }
