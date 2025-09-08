@@ -36,7 +36,7 @@ async function renderMenu(restaurant, menu) {
         });
 
     const button = new ButtonBuilder()
-        .setCustomId('info_' + restaurant.id)
+        .setCustomId('info:' + restaurant.id)
         .setLabel('Plus d\'infos')
         .setStyle(ButtonStyle.Secondary);
 
