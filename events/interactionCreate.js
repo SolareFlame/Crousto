@@ -2,6 +2,8 @@ module.exports = {
     name: 'interactionCreate',
     once: false,
     async execute(interaction) {
+        console.log("NEW Interaction:", interaction.customId);
+
         try {
             if (interaction.isChatInputCommand()) {
                 const cmd = interaction.client.commands.get(interaction.commandName);
