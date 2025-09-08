@@ -48,6 +48,7 @@ const path = require('path');
  * @typedef {Object} Data
  * @property {string} bot_name
  * @property {string} github_url
+ * @property {string} cron_subscription
  */
 
 /**
