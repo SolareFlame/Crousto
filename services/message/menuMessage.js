@@ -1,10 +1,7 @@
-const {EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
-
 /** @type {Config} */
-const config = require('../../config/config.json');
+import config from '/utils/config_loader.js';
+import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder} from "discord.js";
 
-const {renderDate} = require("../../utils/date_loader");
-const {formatMenu} = require("../data/menuService");
 
 /**
  * Génère un message Discord avec le menu du jour d'un restaurant.
@@ -47,5 +44,3 @@ async function renderMenu(restaurant, menu) {
         components: [row]
     }
 }
-
-module.exports = { renderMenu };

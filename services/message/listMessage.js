@@ -1,14 +1,14 @@
-const { EmbedBuilder } = require('discord.js');
-
 /** @type {Config} */
-const config = require('../../config/config.json');
+import config from '/utils/config_loader.js';
+import {EmbedBuilder} from "discord.js";
+
 
 /**
  * Rend une liste de restaurants dans un embed Discord.
  * @param {Array<{ title: string, shortDesc?: string }>} restaurants
  * @returns {Promise<{embeds: EmbedBuilder[]}>}
  */
-async function renderList(restaurants) {
+export async function renderList(restaurants) {
 
     const description = restaurants.length > 0
         ?
@@ -39,5 +39,3 @@ async function renderList(restaurants) {
         embeds: [embed],
     };
 }
-
-module.exports = { renderListe: renderList };

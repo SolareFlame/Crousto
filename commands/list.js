@@ -1,10 +1,9 @@
-const {SlashCommandBuilder} = require('discord.js');
+import {SlashCommandBuilder} from "discord.js";
+import {getAllRestaurants} from "../services/data/restaurantService.js";
+import {renderListe} from "../services/message/listMessage.js";
 
-const {getAllRestaurants} = require('../services/data/restaurantService');
-const {renderListe} = require("../services/message/listMessage");
 
-
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('list')
         .setDescription('Affiche les restaurants disponibles'),

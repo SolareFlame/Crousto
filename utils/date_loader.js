@@ -1,7 +1,7 @@
 /**
  * Retourne la date d’aujourd’hui au format ISO (YYYY-MM-DD).
  */
-function getTodayDate() {
+export function getTodayDate() {
     const d = new Date();
     const y = d.getFullYear();
     const m = `${d.getMonth() + 1}`.padStart(2, '0');
@@ -15,11 +15,9 @@ function getTodayDate() {
 /**
  * Retourne une date formatée en français.
  */
-function renderDate(date) {
+export function renderDate(date) {
     const options = { weekday: 'long', month: 'long', day: 'numeric' };
     const d = new Date(date);
 
     return d.toLocaleDateString('fr-FR', options);
 }
-
-module.exports = { getTodayDate, renderDate };

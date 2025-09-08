@@ -1,10 +1,5 @@
-const {SlashCommandBuilder} = require('discord.js');
-
-const {getRestaurant} = require('../services/data/restaurantService');
-const {getMenu} = require('../services/data/menuService');
-
-const {renderMenu} = require('../services/message/menuMessage');
-const {getAllRestaurants} = require("../services/data/restaurantService");
+import { SlashCommandBuilder } from "discord.js";
+import { getAllRestaurants } from "../services/data/restaurantService.js";
 
 const heures = [];
 for (let h = 8; h <= 21; h++) {

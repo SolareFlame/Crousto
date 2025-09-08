@@ -1,5 +1,5 @@
-const {findRestaurantBySourceId, setRestaurant, findAllRestaurants} = require("../../db/restaurant");
-const { fetchRestaurants } = require('../../integrations/restaurants');
+import {findAllRestaurants, findRestaurantBySourceId, setRestaurant} from "../../db/restaurant.js";
+import {fetchRestaurants} from "../../integrations/restaurants.js";
 
 /**
  * Retourne un restaurant par son ID.
@@ -7,7 +7,7 @@ const { fetchRestaurants } = require('../../integrations/restaurants');
  * @param {number|string} sourceId
  * @returns {Promise<RestaurantDB|null>}
  */
-async function getRestaurant(sourceId) {
+export async function getRestaurant(sourceId) {
     let restaurant = await findRestaurantBySourceId(sourceId)
 
     // INSERT DB
@@ -34,12 +34,12 @@ async function getRestaurant(sourceId) {
  * @returns {Promise<RestaurantDB[]>}
  */
 
-async function getAllRestaurants() {
+export async function getAllRestaurants() {
     return await findAllRestaurants();
 }
 
 
-async function updateRestaurants(_logs = false) {
+export async function updateRestaurants(_logs = false) {
     const items = await fetchRestaurants();
     for (const item of items) {
         try {
@@ -50,5 +50,3 @@ async function updateRestaurants(_logs = false) {
         }
     }
 }
-
-module.exports = { getAllRestaurants, updateRestaurants, getRestaurant };

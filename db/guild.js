@@ -1,13 +1,13 @@
-const { PrismaClient } = require('@prisma/client');
+import {PrismaClient} from "@prisma/client";
 const prisma = new PrismaClient();
 
-function addGuild(guildId, name) {
+export function addGuild(guildId, name) {
     return prisma.guild.create({
         data: {guildId, name},
     });
 }
 
-function removeGuild(guildId) {
+export function removeGuild(guildId) {
     return prisma.guild.delete({
         where: {guildId},
     });

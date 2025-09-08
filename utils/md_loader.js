@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-function loadFile(file_name) {
+export function loadFile(file_name) {
     try {
         const banner_path = path.join(__dirname, '..', 'res', file_name + '.md');
         const raw = fs.readFileSync(banner_path, 'utf8');
@@ -10,5 +10,3 @@ function loadFile(file_name) {
         return null;
     }
 }
-
-module.exports = { loadFile };

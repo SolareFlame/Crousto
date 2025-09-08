@@ -1,6 +1,6 @@
-const cheerio = require("cheerio");
+import cheerio from 'cheerio'
 
-function parseHtml(html) {
+export function parseHtml(html) {
     const decoded = html
         .replace(/\\u003C/g, "<")
         .replace(/\\u003E/g, ">")
@@ -25,5 +25,3 @@ function parseHtml(html) {
 
     return {sections };
 }
-
-module.exports = { parseHtml };

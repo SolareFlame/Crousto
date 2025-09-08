@@ -1,9 +1,8 @@
-const {EmbedBuilder} = require('discord.js');
-
 /** @type {Config} */
-const config = require('../../config/config.json');
+import config from '/utils/config_loader.js';
+import {EmbedBuilder} from "discord.js";
 
-async function renderHelp() {
+export async function renderHelp() {
     const embed = new EmbedBuilder()
         .setAuthor({
             name: config.data.bot_name,
@@ -41,7 +40,5 @@ async function renderHelp() {
         embeds: [embed]
     };
 }
-
-module.exports = { renderHelp };
 
 

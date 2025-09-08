@@ -1,12 +1,12 @@
 /** @type {Config} */
-const {config} = require('../utils/config_loader');
-const cheerio = require('cheerio');
+import {config} from "/utils/config_loader.js";
+import cheerio from "cheerio";
 
 /**
  * Récupère la liste des restaurants depuis l'API
  * et enrichit chaque entrée avec name, address, phone.
  */
-async function fetchRestaurants() {
+export async function fetchRestaurants() {
     const url = `${config.api_univ.url}${config.api_univ.endpoints.restaurants.endpoint}`;
 
     try {
@@ -25,4 +25,3 @@ async function fetchRestaurants() {
     }
 }
 
-module.exports = {fetchRestaurants};

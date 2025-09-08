@@ -1,8 +1,7 @@
-const {SlashCommandBuilder} = require('discord.js');
+import { SlashCommandBuilder } from "discord.js";
+import {renderHelp} from "../services/message/helpMessage.js";
 
-const {renderHelp} = require("../services/message/helpMessage");
-
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('help')
         .setDescription('Affiche les commandes disponibles'),

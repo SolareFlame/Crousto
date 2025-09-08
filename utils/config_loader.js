@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 /**
  * @typedef {Object} Config
@@ -58,13 +58,13 @@ const path = require('path');
  */
 
 /** @type {Config} */
-const config = loadConfig();
+export const config = loadConfig();
 
 /**
  * Load configuration from config.json file.
  * @returns {Config} The configuration object.
  */
-function loadConfig() {
+export function loadConfig() {
     const config_path = path.join(__dirname, '..', 'config', 'config.json');
 
     let file_config = {};
@@ -80,5 +80,3 @@ function loadConfig() {
 
     return file_config;
 }
-
-module.exports = {config};

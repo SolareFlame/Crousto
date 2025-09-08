@@ -1,8 +1,8 @@
-const { PrismaClient } = require('@prisma/client');
+import {PrismaClient} from "@prisma/client";
 const prisma = new PrismaClient();
-const crypto = require('crypto');
-const {config} = require("../utils/config_loader");
-const {extractAddress, extractPhone} = require("../utils/data_extractor");
+
+import crypto from "crypto";
+import {config} from "/utils/config_loader.js";
 
 /**
  * @typedef {Object} PlanningDB
@@ -37,7 +37,7 @@ const {extractAddress, extractPhone} = require("../utils/data_extractor");
  * Retourne tous les restaurants avec leurs plannings.
  * @returns {Promise<RestaurantDB[]>}
  */
-async function findAllRestaurants() {
+export function findAllRestaurants() {
     console.log('DB called: ', 'findAllRestaurants');
 
     return prisma.restaurant.findMany({
@@ -53,7 +53,7 @@ async function findAllRestaurants() {
  * @param rSourceId
  * @returns {Promise<RestaurantDB>}
  */
-async function findRestaurantBySourceId(rSourceId) {
+export async function findRestaurantBySourceId(rSourceId) {
     console.log('DB called: ', 'findRestaurantBySourceId');
 
     const ttl = Number(config.db_cache.restaurant_validity_time);
@@ -73,7 +73,7 @@ async function findRestaurantBySourceId(rSourceId) {
  * @param {object} item - objet restaurant de l'API (voir exemple dans ton message)
  * @param _logs {boolean} [true] - Activer/Désactiver les logs console
  */
-async function setRestaurant(item, _logs = false) {
+export async function setRestaurant(item, _logs = false) {
     if(_logs) console.log('DB called: ', 'setRestaurant');
 
     const sourceId = Number(item.id);
@@ -148,5 +148,3 @@ async function setRestaurant(item, _logs = false) {
         include: { plannings: true },
     });
 }
-
-module.exports = { findAllRestaurants, findRestaurantBySourceId, setRestaurant };

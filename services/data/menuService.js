@@ -1,6 +1,6 @@
-const { fetchMenu } = require('../../integrations/menus');
-const { getTodayDate } = require('../../utils/date_loader');
-const {findMenuByDate, setMenu} = require("../../db/menu");
+import {fetchMenu} from "../../integrations/menus.js";
+import {getTodayDate} from "../../utils/date_loader.js";
+import {findMenuByDate, setMenu} from "../../db/menu.js";
 
 /**
  * Retourne le menu d'un restaurant pour une date ISO (YYYY-MM-DD).
@@ -27,7 +27,7 @@ async function getMenuDay(restaurant_id, date = getTodayDate()){
  * @param date
  * @returns {Promise<Meal|null>}
  */
-async function getMenu(restaurant_id, meal_name, date = getTodayDate()) {
+export async function getMenu(restaurant_id, meal_name, date = getTodayDate()) {
     let menu = await findMenuByDate(restaurant_id, meal_name, date);
 
     // INSERT DB
@@ -53,7 +53,7 @@ async function getMenu(restaurant_id, meal_name, date = getTodayDate()) {
     * @param {string} meal_name - Nom du repas (optionnel).
  * @returns {string}
  */
-function formatMenu(menu, meal_name = 'midi') {
+export function formatMenu(menu, meal_name = 'midi') {
     if(!menu) {
         return 'Aucun menu disponible';
     }
@@ -79,5 +79,3 @@ function formatMenu(menu, meal_name = 'midi') {
 
     return blocks.length ? blocks.join('\n\n') : 'Aucun menu disponible';
 }
-
-module.exports = { getMenu, formatMenu };

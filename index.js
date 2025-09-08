@@ -1,13 +1,15 @@
-const {Client, GatewayIntentBits, Collection} = require('discord.js');
-const {config} = require('dotenv');
-const path = require('path');
-const {readdirSync} = require('fs');
+import { Client, GatewayIntentBits, Collection } from "discord.js";
+import {config} from "dotenv";
 
-const {REST} = require('@discordjs/rest');
-const {Routes} = require('discord-api-types/v10');
+import path from "path";
+import { readdirSync } from "fs";
 
-const {updateRestaurants} = require("./services/data/restaurantService");
-const {loadFile} = require('./utils/md_loader');
+import { REST } from "@discordjs/rest";
+import { Routes } from "discord-api-types/v10";
+
+import { updateRestaurants } from "./services/data/restaurantService.js";
+import { loadFile } from "./utils/md_loader.js";
+import { start } from "./services/data/subService.js";
 
 config();
 
@@ -40,12 +42,16 @@ client.once('clientReady', async () => {
         await loadInteraction(client, 'buttons');
 
         await updateRestaurants();
+
+        start(client).then(r => console.log("Subscriptions cron started."));
     } catch (error) {
         console.error('Stating: ERROR=', error);
     }
 });
 
 client.login(process.env.DISCORD_TOKEN).catch(console.error);
+
+
 
 
 async function loadEvents() {
@@ -55,7 +61,7 @@ async function loadEvents() {
     for (const file of events_files) {
         console.log(`- Starting: Loading event file "${file}".`);
 
-        const event = require(path.join(events_path, file));
+        const event = await import(path.join(events_path, file));
 
         if (event.once) {
             client.once(event.name, (...args) => event.execute(...args, client));

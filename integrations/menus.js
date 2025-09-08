@@ -1,5 +1,5 @@
 /** @type {Config} */
-const { config } = require('../utils/config_loader');
+import {config} from "/utils/config_loader.js";
 
 
 /**
@@ -10,7 +10,7 @@ const { config } = require('../utils/config_loader');
  * @returns {Promise<Array>} tableau de menus (jours), ou [] si rien
  * @throws {Error} if restaurant_id is missing or the API returns non-OK
  */
-async function fetchMenu(restaurant_id) {
+export async function fetchMenu(restaurant_id) {
     if (!restaurant_id) {
         throw new Error('restaurant_id needed.');
     }
@@ -34,6 +34,3 @@ async function fetchMenu(restaurant_id) {
         return [];
     }
 }
-
-
-module.exports = { fetchMenu };

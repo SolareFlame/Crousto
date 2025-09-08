@@ -1,12 +1,10 @@
-const {SlashCommandBuilder} = require('discord.js');
+import {SlashCommandBuilder} from "discord.js";
+import {getAllRestaurants, getRestaurant} from "../services/data/restaurantService.js";
+import {getMenu} from "../services/data/menuService.js";
+import {renderMenu} from "../services/message/menuMessage.js";
 
-const {getRestaurant} = require('../services/data/restaurantService');
-const {getMenu} = require('../services/data/menuService');
 
-const {renderMenu} = require('../services/message/menuMessage');
-const {getAllRestaurants} = require("../services/data/restaurantService");
-
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('menu')
         .setDescription('Affiche le menu du jour')

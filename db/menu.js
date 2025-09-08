@@ -1,8 +1,8 @@
-const { PrismaClient } = require('@prisma/client');
+import {PrismaClient} from "@prisma/client";
 const prisma = new PrismaClient();
-const crypto = require('crypto');
 
-const {config} = require("../utils/config_loader");
+import crypto from "crypto";
+import {config} from "/utils/config_loader.js";
 
 /**
  * @typedef {Object} DishDB
@@ -57,7 +57,7 @@ const {config} = require("../utils/config_loader");
  * @param {number|string} sourceId
  * @returns {Promise<MenuDB|null>}
  */
-async function findMenuBySourceId(sourceId) {
+export async function findMenuBySourceId(sourceId) {
     console.log('DB called: ', 'findMenuBySourceId');
 
     const ttl = Number(config.db_cache.menu_validity_time);
@@ -88,7 +88,7 @@ async function findMenuBySourceId(sourceId) {
  * @returns {Promise<MenuDB|null>}
  */
 
-async function findMenuByDate(rSourceId, mealName, isoDate) {
+export async function findMenuByDate(rSourceId, mealName, isoDate) {
     console.log('DB called: ', 'findMenuByDate');
 
     if (!isoDate) throw new Error('isoDate requis (YYYY-MM-DD)');
@@ -128,7 +128,7 @@ async function findMenuByDate(rSourceId, mealName, isoDate) {
  * @param {number|string} rSourceId  ID API du restaurant (Restaurant.sourceId)
  * @param {object} item              Menu API: { id, date, meal: [...] }
  */
-async function setMenu(rSourceId, item) {
+export async function setMenu(rSourceId, item) {
     console.log('DB called: ', 'setMenu');
 
     const restaurant = await prisma.restaurant.findUnique({
@@ -201,6 +201,3 @@ async function setMenu(rSourceId, item) {
         },
     });
 }
-
-
-module.exports = { findMenuBySourceId, findMenuByDate, setMenu };

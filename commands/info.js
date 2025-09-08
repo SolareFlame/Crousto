@@ -1,10 +1,11 @@
-const {SlashCommandBuilder} = require('discord.js');
+import {SlashCommandBuilder} from "discord.js";
 
-const {getRestaurant} = require('../services/data/restaurantService');
-const {renderInfo} = require("../services/message/infoMessage");
-const {findAllRestaurants} = require("../db/restaurant");
+import {getRestaurant} from "../services/data/restaurantService.js";
+import {findAllRestaurants} from "../db/restaurant.js";
+import {renderInfo} from "../services/message/infoMessage.js";
 
-module.exports = {
+
+export default {
     data: new SlashCommandBuilder()
         .setName('info')
         .setDescription('Affiche les informations sur un restaurant')

@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+import {PrismaClient} from "@prisma/client";
 const prisma = new PrismaClient();
 
 /**
@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
  * @param role
  * @returns {Promise<import('@prisma/client').Subscription>}
  */
-function addSubscription(guildId, channelId, restaurantId, cron, role) {
+export function addSubscription(guildId, channelId, restaurantId, cron, role) {
     return prisma.subscription.create({
         data: {
             guildId,
@@ -29,7 +29,7 @@ function addSubscription(guildId, channelId, restaurantId, cron, role) {
  * @param restaurantId
  * @returns {Promise<{ count: number }>} Nombre de subscriptions supprimées
  */
-function removeSubscription(guildId, channelId, restaurantId) {
+export function removeSubscription(guildId, channelId, restaurantId) {
     return prisma.subscription.deleteMany({
         where: {
             guildId,
@@ -44,7 +44,7 @@ function removeSubscription(guildId, channelId, restaurantId) {
  * @param guildId
  * @returns {Promise<import('@prisma/client').Subscription[]>} Tableau des subscriptions
  */
-function getSubscriptionsByGuild(guildId) {
+export function getSubscriptionsByGuild(guildId) {
     return prisma.subscription.findMany({
         where: {
             guildId
@@ -57,7 +57,7 @@ function getSubscriptionsByGuild(guildId) {
  * @param hour
  * @returns {Promise<import('@prisma/client').Subscription[]>} Tableau des subscriptions
  */
-function getSubscriptionsForHour(hour) {
+export function getSubscriptionsForHour(hour) {
     const pattern = `0 ${hour} * * *`;
     return prisma.subscription.findMany({
         where: {
@@ -65,11 +65,4 @@ function getSubscriptionsForHour(hour) {
             active: true
         }
     });
-}
-
-module.exports = {
-    addSubscription,
-    removeSubscription,
-    getSubscriptionsByGuild,
-    getSubscriptionsForHour
 }
