@@ -137,8 +137,8 @@ model Dish {
 }
 
 model Guild {
-  id   String  @id
-  name String?
+  guildId String  @id
+  name    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -160,7 +160,7 @@ model Subscription {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  guild      Guild      @relation(fields: [guildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  guild      Guild      @relation(fields: [guildId], references: [guildId], onDelete: Cascade, onUpdate: Cascade)
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([guildId, channelId, restaurantId])
