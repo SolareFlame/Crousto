@@ -14,7 +14,8 @@
     "@prisma/client": "^6.15.0",
     "cheerio": "^1.0.0",
     "discord-api-types": "^0.38.22",
-    "discord.js": "^14.16.2"
+    "discord.js": "^14.16.2",
+    "node-cron": "^4.2.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
