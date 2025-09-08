@@ -27,7 +27,7 @@ client.buttons  = new Collection();
 client.selects  = new Collection();
 client.modals   = new Collection();
 
-client.once('ready', async () => {
+client.once('clientReady', async () => {
     const banner = loadFile('banner');
     if (banner) console.log(banner);
 
@@ -45,9 +45,6 @@ client.once('ready', async () => {
 });
 
 client.login(process.env.DISCORD_TOKEN).catch(console.error);
-
-
-
 
 
 async function loadEvents() {
