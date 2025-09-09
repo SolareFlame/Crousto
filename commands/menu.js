@@ -9,8 +9,8 @@ export default {
         .setName('menu')
         .setDescription('Affiche le menu du jour')
         .addStringOption(option =>
-            option.setName('id')
-                .setDescription('ID du restaurant')
+            option.setName('restaurant')
+                .setDescription('Crous voulu')
                 .setRequired(true)
                 .setAutocomplete(true)
         )
@@ -41,7 +41,7 @@ export default {
     },
 
     async execute(interaction) {
-        const restaurant_id = interaction.options.getString('id');
+        const restaurant_id = interaction.options.getString('restaurant');
         const meal_name = interaction.options.getString('repas') ?? 'midi';
 
         const menu = await getMenu(restaurant_id, meal_name);
