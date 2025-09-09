@@ -49,14 +49,14 @@ export default {
     async execute(interaction) {
         const restaurant_id = interaction.options.getString('id');
         const heure = interaction.options.getString('heure');
-        const role = interaction.options.getRole('role') || null;
+        const role = interaction.options.getRole('role').id || null;
 
         const channel_id = interaction.channelId;
         const guild_id = interaction.guildId;
 
-        await follow(guild_id, channel_id, restaurant_id, heure, role);
+        let subscription = await follow(guild_id, channel_id, restaurant_id, heure, role);
 
-        const render = await renderFollow();
+        const render = await renderFollow(subscription);
         await interaction.editReply(render);
     },
 };

@@ -160,7 +160,7 @@ model Subscription {
   guildId      String
   channelId    String
   restaurantId String
-  mealName     String?
+  mealName     String  @default("midi")
   roleId       String?
   active       Boolean @default(true)
   cron         String  @default("0 10 * * 1-5")

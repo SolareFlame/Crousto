@@ -11,7 +11,7 @@ export async function renderFollowList(follow_list) {
         })
         .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
         .setTitle('Liste des restaurants suivis')
-        .setDescription(follow_list.map (f => `**${f.restaurantId}** (ID: \`${f.id}\`)`).join('\n') || 'Aucun restaurant suivi.')
+        .setDescription(follow_list.map (f => `<#${f.channelId}> <@&${f.roleId}> : ${f.restaurant.title} (${f.mealName}) - ${f.cron}h`).join('\n') || 'Aucun restaurant suivi.')
         .setTimestamp()
         .setFooter({
             text: `${config.data.bot_name} by Solare`,

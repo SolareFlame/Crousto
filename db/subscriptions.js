@@ -1,5 +1,5 @@
 import {PrismaClient} from "@prisma/client";
-const prisma = new PrismaClient();
+const prisma = new PrismaClient(/*{ log: ['query','error','warn'] }*/);
 
 /**
  * Add a new subscription
@@ -12,15 +12,11 @@ const prisma = new PrismaClient();
  */
 export async function addSubscription(guildId, channelId, restaurantId, cron, roleId) {
     return prisma.subscription.create({
-        data: {
-            guildId,
-            channelId,
-            restaurantId,
-            cron,
-            roleId
-        }
+        data: { guildId, channelId, cron, roleId, restaurantId },
+        include: { restaurant: true },
     });
 }
+
 
 /**
  * Remove a subscription
@@ -48,9 +44,17 @@ export async function getSubscriptionsByGuildId(guildId) {
     return prisma.subscription.findMany({
         where: {
             guildId
+        },
+        include: {
+            restaurant: {
+                select: {
+                    title: true
+                }
+            }
         }
     });
 }
+
 
 /**
  * Get all subscriptions for an hour

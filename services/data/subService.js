@@ -48,7 +48,8 @@ export function start(client) {
                         }
 
                         const restaurant = await getRestaurant(sub.restaurantId);
-                        const render = await renderMenu(restaurant, menu);
+                        let render = await renderMenu(restaurant, menu);
+                        render.content = sub.roleId ? `<@&${sub.roleId}>` : undefined;
 
                         const channel = await client.channels.fetch(sub.channelId).catch(() => null);
 
@@ -96,7 +97,7 @@ export async function follow(guildId, channelId, rId, cronExpr, roleId = null) {
         throw new Error("Guild not found in database. Please register the guild first.");
     }
 
-    return addSubscription(guildId, channelId, rId, cronExpr, roleId = null);
+    return addSubscription(guildId, channelId, rId, cronExpr, roleId);
 }
 export async function unfollow(guildId, channelId, rId) {
     return removeSubscription(guildId, channelId, rId);
