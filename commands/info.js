@@ -1,7 +1,6 @@
 import {SlashCommandBuilder} from "discord.js";
 
-import {getRestaurant} from "../services/data/restaurantService.js";
-import {findAllRestaurants} from "../db/restaurant.js";
+import {getRestaurant, getAllRestaurants} from "../services/data/restaurantService.js";
 import {renderInfo} from "../services/message/infoMessage.js";
 
 
@@ -17,7 +16,7 @@ export default {
         ),
 
     async autocomplete(interaction) {
-        const restaurants = await findAllRestaurants();
+        const restaurants = await getAllRestaurants();
         const focused = interaction.options.getFocused();
 
         const choices = restaurants.map(r => ({
