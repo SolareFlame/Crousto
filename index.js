@@ -1,20 +1,21 @@
-import { fileURLToPath, pathToFileURL } from "url";
+import {fileURLToPath, pathToFileURL} from "url";
 import path from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
+const __dirname = path.dirname(__filename);
 
-import { Client, GatewayIntentBits, Collection } from "discord.js";
+import {Client, GatewayIntentBits, Collection} from "discord.js";
 import {config} from "dotenv";
 
-import { readdirSync } from "fs";
+import {readdirSync} from "fs";
 
-import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/v10";
+import {REST} from "@discordjs/rest";
+import {Routes} from "discord-api-types/v10";
 
-import { updateRestaurants } from "./services/data/restaurantService.js";
-import { loadFile } from "./utils/md_loader.js";
-import { start } from "./services/data/subService.js";
+import {updateRestaurants} from "./services/data/restaurantService.js";
+import {loadFile} from "./utils/md_loader.js";
+import {start} from "./services/data/subService.js";
+import {addGuild} from "./services/data/guildService.js";
 
 config();
 
@@ -46,6 +47,7 @@ client.once('clientReady', async () => {
         await loadCommands(application_id);
         await loadInteraction(client, 'buttons');
 
+        await updateGuilds(client);
         await updateRestaurants();
 
         start(client);
@@ -55,8 +57,6 @@ client.once('clientReady', async () => {
 });
 
 client.login(process.env.DISCORD_TOKEN).catch(console.error);
-
-
 
 
 async function loadEvents() {
@@ -106,7 +106,7 @@ async function loadCommands(app_id) {
 
     await rest.put(
         Routes.applicationGuildCommands(app_id, process.env.DEV_GUILD_ID),
-        { body: commands_json }
+        {body: commands_json}
     );
 
     console.log("Starting: All commands loaded.");
@@ -155,4 +155,19 @@ async function loadInteraction(client, folder) {
     }
 
     console.log(`Starting: All ${folder} loaded.`);
+}
+
+async function updateGuilds(client) {
+    await client.guilds.fetch();
+
+    const tasks = client.guilds.cache.map(async (g) => {
+        try {
+            await addGuild(g.id, client);
+            console.log('Guild loaded:', g.name);
+        } catch (e) {
+            console.error('Guild load error:', g.id, e?.message || e);
+        }
+    });
+
+    await Promise.allSettled(tasks);
 }
