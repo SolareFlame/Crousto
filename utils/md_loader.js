@@ -1,5 +1,10 @@
-import fs from 'fs';
+import { fileURLToPath, pathToFileURL } from "url";
 import path from 'path';
+
+import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename)
 
 export function loadFile(file_name) {
     try {
