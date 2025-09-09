@@ -4,6 +4,7 @@ import { addSubscription, getSubscriptionsForHour, removeSubscription } from "..
 import { getMenu } from "./menuService.js";
 import { getRestaurant } from "./restaurantService.js";
 import { renderMenu } from "../message/menuMessage.js";
+import {getGuild} from "../../db/guild.js";
 
 
 let subscription_task = null;
@@ -76,8 +77,15 @@ export function stop() {
     }
 }
 
-export async function follow(guildId, channelId, rSourceId, cronExpr, role) {
-    return addSubscription(guildId, channelId, rSourceId, cronExpr, role);
+export async function follow(guildId, channelId, rId, cronExpr, roleId = null) {
+    if(await getGuild(guildId) === null) {
+        console.log("guildId not found:" + guildId);
+        throw new Error("Guild not found in database. Please register the guild first.");
+    }
+
+    console.log("ID:" + getGuild(guildId));
+
+    return addSubscription(guildId, channelId, rId, cronExpr, roleId = null);
 }
 export async function unfollow(guildId, channelId, rSourceId) {
     return removeSubscription(guildId, channelId, rSourceId);

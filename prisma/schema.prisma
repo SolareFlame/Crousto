@@ -139,11 +139,20 @@ model Dish {
 model Guild {
   guildId String  @id
   name    String?
+  ownerId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   subscriptions Subscription[]
+}
+
+model User {
+  userId String  @id
+  name   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Subscription {
@@ -152,6 +161,7 @@ model Subscription {
   channelId    String
   restaurantId String
   mealName     String?
+  roleId       String?
   active       Boolean @default(true)
   cron         String  @default("0 10 * * 1-5")
 
@@ -164,7 +174,6 @@ model Subscription {
   guild      Guild      @relation(fields: [guildId], references: [guildId], onDelete: Cascade, onUpdate: Cascade)
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@unique([guildId, channelId, restaurantId])
   @@index([active, cron])
   @@index([guildId, active])
 }

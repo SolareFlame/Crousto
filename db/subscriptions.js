@@ -7,17 +7,17 @@ const prisma = new PrismaClient();
  * @param channelId
  * @param restaurantId
  * @param cron
- * @param role
+ * @param roleId
  * @returns {Promise<import('@prisma/client').Subscription>}
  */
-export function addSubscription(guildId, channelId, restaurantId, cron, role) {
+export function addSubscription(guildId, channelId, restaurantId, cron, roleId) {
     return prisma.subscription.create({
         data: {
             guildId,
             channelId,
             restaurantId,
             cron,
-            role
+            roleId
         }
     });
 }
