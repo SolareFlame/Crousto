@@ -3,6 +3,10 @@ import { config } from '../../utils/config_loader.js';
 import {EmbedBuilder} from "discord.js";
 
 export async function renderHelp() {
+    const banner_embed = new EmbedBuilder()
+        .setImage(config.visuals.banners.default)
+        .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF);
+
     const embed = new EmbedBuilder()
         .setAuthor({
             name: config.data.bot_name,
@@ -28,16 +32,15 @@ export async function renderHelp() {
                 value: `Affiche la liste des restaurants.\n Usage: /list\n`,
                 inline: false
             })
-
         .setThumbnail(config.visuals.logos.default)
         .setTimestamp()
         .setFooter({
-            text: `${process.env.DISCORD_BOT_NAME} by Solare`,
+            text: `${config.data.bot_name} by Solare`,
             iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4'
         });
 
     return {
-        embeds: [embed]
+        embeds: [banner_embed, embed],
     };
 }
 

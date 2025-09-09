@@ -21,6 +21,9 @@
     },
     "logos": {
       "default": "https://imgur.com/wm8X6O9.png"
+    },
+    "banners": {
+      "default": "https://imgur.com/cVOEQbd.png"
     }
   },
   "data": {

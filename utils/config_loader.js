@@ -37,6 +37,7 @@ const __dirname  = path.dirname(__filename);
  * @typedef {Object} Visuals
  * @property {Colors} colors
  * @property {Logos} logos
+ * @property {Banners} banners
  */
 
 /**
@@ -47,6 +48,11 @@ const __dirname  = path.dirname(__filename);
 
 /**
  * @typedef {Object} Logos
+ * @property {string} default
+ */
+
+/**
+ * @typedef {Object} Banners
  * @property {string} default
  */
 
