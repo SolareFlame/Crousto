@@ -1,8 +1,10 @@
 import { SlashCommandBuilder } from "discord.js";
 import { getAllRestaurants } from "../services/data/restaurantService.js";
+import {follow} from "../services/data/subService.js";
+import {renderFollow} from "../services/message/followMessage.js";
 
 const heures = [];
-for (let h = 8; h <= 21; h++) {
+for (let h = 6; h <= 22; h++) {
     heures.push({ name: `${h}h`, value: `${h}`});
 }
 
@@ -47,12 +49,14 @@ export default {
     async execute(interaction) {
         const restaurant_id = interaction.options.getString('id');
         const heure = interaction.options.getString('heure');
-        const role = interaction.options.getRole('role');
+        const role = interaction.options.getRole('role') || null;
 
         const channel_id = interaction.channelId;
         const guild_id = interaction.guildId;
 
-        //const render = TODO
+        await follow(channel_id, guild_id, restaurant_id, heure, role);
+
+        const render = await renderFollow();
         await interaction.editReply(render);
     },
 };

@@ -48,7 +48,7 @@ client.once('clientReady', async () => {
 
         await updateRestaurants();
 
-        start(client).then(r => console.log("Subscriptions cron started."));
+        start(client);
     } catch (error) {
         console.error('Stating: ERROR=', error);
     }
