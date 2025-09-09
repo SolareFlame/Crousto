@@ -67,6 +67,21 @@ export async function findRestaurantBySourceId(rSourceId) {
     });
 }
 
+export async function findRestaurantById(rId) {
+    console.log('DB called: ', 'findRestaurantById');
+
+    const ttl = Number(config.db_cache.restaurant_validity_time);
+    const threshold = new Date(Date.now() - ttl * 1000);
+
+    return prisma.restaurant.findUnique({
+        where: { id: rId, updatedAt: { gte: threshold } },
+        include: {
+            plannings: { orderBy: { weekday: 'asc' } },
+        },
+    });
+}
+
+
 
 /**
  * Crée ou met à jour un restaurant et ses plannings.

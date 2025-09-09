@@ -1,38 +1,32 @@
-import {findAllRestaurants, findRestaurantBySourceId, setRestaurant} from "../../db/restaurant.js";
+import {findAllRestaurants, findRestaurantById, setRestaurant} from "../../db/restaurant.js";
 import {fetchRestaurants} from "../../integrations/restaurants.js";
 
 /**
  * Retourne un restaurant par son ID.
  *
- * @param {number|string} sourceId
+ * @param {number|string} rId
  * @returns {Promise<RestaurantDB|null>}
  */
-export async function getRestaurant(sourceId) {
-    let restaurant = await findRestaurantBySourceId(sourceId)
+export async function getRestaurant(rId) {
+    let restaurant = await findRestaurantById(rId)
 
     // INSERT DB
     if(restaurant === null) {
         const list = await fetchRestaurants();
-        const restaurant_raw = list.find(r => r.id === parseInt(sourceId)) ?? null;
+        const restaurant_raw = list.find(r => r.id === rId) ?? null;
 
         try {
-            if(restaurant_raw) await setRestaurant(restaurant_raw).then(r => console.log('Restaurant saved to DB:', r.title));
+            if(restaurant_raw) await setRestaurant(restaurant_raw)
         } catch (error) {
             console.error('Error saving restaurant to DB:', error);
         }
 
-        restaurant = await findRestaurantBySourceId(sourceId);
+        restaurant = await findRestaurantBySourceId(rId);
     }
 
     if(!restaurant) return null;
     return restaurant
 }
-
-/**
- * Retourne tous les restaurants.
- *
- * @returns {Promise<RestaurantDB[]>}
- */
 
 export async function getAllRestaurants() {
     return await findAllRestaurants();

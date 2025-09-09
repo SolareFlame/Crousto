@@ -21,7 +21,7 @@ export default {
 
         const choices = restaurants.map(r => ({
             name: r.title,
-            value: String(r.sourceId),
+            value: String(r.id),
         }));
 
         const filtered = choices.filter(choice =>

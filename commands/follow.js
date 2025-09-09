@@ -36,7 +36,7 @@ export default {
 
         const choices = restaurants.map(r => ({
             name: r.title,
-            value: String(r.sourceId),
+            value: String(r.id),
         }));
 
         const filtered = choices.filter(choice =>
@@ -54,7 +54,9 @@ export default {
         const channel_id = interaction.channelId;
         const guild_id = interaction.guildId;
 
-        await follow(channel_id, guild_id, restaurant_id, heure, role);
+        console.log(`guildId:${guild_id}`);
+
+        await follow(guild_id, channel_id, restaurant_id, heure, role);
 
         const render = await renderFollow();
         await interaction.editReply(render);

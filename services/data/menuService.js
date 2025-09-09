@@ -1,46 +1,48 @@
 import {fetchMenu} from "../../integrations/menus.js";
 import {getTodayDate} from "../../utils/date_loader.js";
-import {findMenuByDate, setMenu} from "../../db/menu.js";
+import {findMenuById, setMenu} from "../../db/menu.js";
+import {getRestaurant} from "./restaurantService.js";
 
 /**
  * Retourne le menu d'un restaurant pour une date ISO (YYYY-MM-DD).
  *
- * @param {string|number} restaurant_id
+ * @param {string|number} rId
  * @param date
  * @returns {Promise<Menu|null>}
  */
-async function getMenuDay(restaurant_id, date = getTodayDate()){
+async function getAPIMenu(rId, date = getTodayDate()){
     if (!date) throw new Error('date format ISO requis (YYYY-MM-DD)');
 
-    const rows = await fetchMenu(restaurant_id);
+    const rSourceId = (await getRestaurant(rId)).sourceId;
+
+    const rows = await fetchMenu(rSourceId);
     const found = rows.find(r => r.date === date);
 
     return found || null;
 }
 
-
 /**
  * Retourne le menu avec le contenu du repas directement spécifié dans "menu.meal".
  *
- * @param restaurant_id
+ * @param rId
  * @param {string} meal_name
  * @param date
  * @returns {Promise<Meal|null>}
  */
-export async function getMenu(restaurant_id, meal_name, date = getTodayDate()) {
-    let menu = await findMenuByDate(restaurant_id, meal_name, date);
+export async function getMenu(rId, meal_name, date = getTodayDate()) {
+    let menu = await findMenuById(rId, meal_name, date);
 
     // INSERT DB
     if(menu === null) {
-        const menu_row = await getMenuDay(restaurant_id, date);
+        const menu_row = await getAPIMenu(rId, date);
 
         try {
-            if(menu_row) await setMenu(restaurant_id, menu_row);
+            if(menu_row) await setMenu(rId, menu_row);
         } catch (error) {
             console.error('Error saving menu to DB:', error);
         }
 
-        menu = await findMenuByDate(restaurant_id, meal_name, date);
+        menu = await findMenuById(rId, meal_name, date);
     }
 
     if(!menu) return null;

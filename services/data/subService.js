@@ -87,6 +87,6 @@ export async function follow(guildId, channelId, rId, cronExpr, roleId = null) {
 
     return addSubscription(guildId, channelId, rId, cronExpr, roleId = null);
 }
-export async function unfollow(guildId, channelId, rSourceId) {
-    return removeSubscription(guildId, channelId, rSourceId);
+export async function unfollow(guildId, channelId, rId) {
+    return removeSubscription(guildId, channelId, rId);
 }

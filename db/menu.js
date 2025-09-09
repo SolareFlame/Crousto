@@ -53,42 +53,15 @@ import {config} from "../utils/config_loader.js";
 
 
 /**
- * Trouve un menu par son sourceId (id menu côté API), avec hiérarchie complète.
- * @param {number|string} sourceId
- * @returns {Promise<MenuDB|null>}
- */
-export async function findMenuBySourceId(sourceId) {
-    console.log('DB called: ', 'findMenuBySourceId');
-
-    const ttl = Number(config.db_cache.menu_validity_time);
-    const threshold = new Date(Date.now() - ttl * 1000);
-
-    return prisma.menu.findUnique({
-        where: { sourceId: parseInt(sourceId), updatedAt: { gte: threshold } },
-        include: {
-            meals: {
-                orderBy: { position: 'asc' },
-                include: {
-                    categories: {
-                        orderBy: { position: 'asc' },
-                        include: { dishes: { orderBy: { position: 'asc' } } },
-                    },
-                },
-            },
-        },
-    });
-}
-
-/**
  * Trouve le menu d'un restaurant en utilisant un Id de restaurant, un nom de repas (optionnel) et une date.
  *
- * @param rSourceId
+ * @param rId
  * @param mealName
  * @param isoDate
  * @returns {Promise<MenuDB|null>}
  */
 
-export async function findMenuByDate(rSourceId, mealName, isoDate) {
+export async function findMenuById(rId, mealName, isoDate) {
     console.log('DB called: ', 'findMenuByDate');
 
     if (!isoDate) throw new Error('isoDate requis (YYYY-MM-DD)');
@@ -102,7 +75,7 @@ export async function findMenuByDate(rSourceId, mealName, isoDate) {
 
     return prisma.menu.findFirst({
         where: {
-            restaurantSourceId: Number(rSourceId),
+            restaurantId: rId,
             date: { gte: start, lt: end },
             ...(mealName ? { meals: { some: { name: String(mealName) } } } : {}),
             updatedAt: { gte: threshold }
@@ -125,18 +98,18 @@ export async function findMenuByDate(rSourceId, mealName, isoDate) {
 
 /**
  * Crée ou met à jour un restaurant et ses plannings.
- * @param {number|string} rSourceId  ID API du restaurant (Restaurant.sourceId)
+ * @param {number|string} rId  ID du restaurant (Restaurant.sourceId)
  * @param {object} item              Menu API: { id, date, meal: [...] }
  */
-export async function setMenu(rSourceId, item) {
+export async function setMenu(rId, item) {
     console.log('DB called: ', 'setMenu');
 
     const restaurant = await prisma.restaurant.findUnique({
-        where: { sourceId: Number(rSourceId) },
+        where: { id: rId },
         select: { id: true, sourceId: true },
     });
     if (!restaurant) {
-        throw new Error(`Restaurant introuvable pour sourceId=${rSourceId}`);
+        throw new Error(`Restaurant introuvable pour sourceId=${rId}`);
     }
 
     const mSourceId = Number(item.id);
