@@ -5,7 +5,7 @@ import { EmbedBuilder } from "discord.js";
 export async function renderFollow(sub) {
     let message = `Ce salon recevra désormais le menu de **${sub.restaurant.title}** (${sub.mealName}) chaque jour à **${sub.cron}h00**.`;
     if(sub.roleId) {
-        message += `\n\nLes membres avec le rôle <@&${sub.roleId}> seront mentionnés à chaque envoi.`;
+        message += `\nLes membres avec le rôle <@&${sub.roleId}> seront mentionnés à chaque envoi.`;
     }
     message += `\n\nPour supprimer cet abonnement, utilisez la commande \`/unfollow\`.`;
 
