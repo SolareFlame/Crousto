@@ -54,8 +54,6 @@ export default {
         const channel_id = interaction.channelId;
         const guild_id = interaction.guildId;
 
-        console.log(`guildId:${guild_id}`);
-
         await follow(guild_id, channel_id, restaurant_id, heure, role);
 
         const render = await renderFollow();
