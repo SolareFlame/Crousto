@@ -1,6 +1,11 @@
 import cron from "node-cron";
 import { config } from "../../utils/config_loader.js";
-import { addSubscription, getSubscriptionsForHour, removeSubscription } from "../../db/subscriptions.js";
+import {
+    addSubscription,
+    getSubscriptionsByGuildId,
+    getSubscriptionsForHour,
+    removeSubscription
+} from "../../db/subscriptions.js";
 import { getMenu } from "./menuService.js";
 import { getRestaurant } from "./restaurantService.js";
 import { renderMenu } from "../message/menuMessage.js";
@@ -48,7 +53,8 @@ export function start(client) {
                         const channel = await client.channels.fetch(sub.channelId).catch(() => null);
 
                         if (channel && typeof channel.isTextBased === "function" && channel.isTextBased()) {
-                            await channel.send({ content: render });
+                            await channel.send(render);
+
                             console.log(`Sub: Sent to channel=${sub.channelId} restaurant=${sub.restaurantId}`);
                         } else {
                             console.warn(`Sub: Channel non textuel ou introuvable: ${sub.channelId}`);
@@ -77,13 +83,18 @@ export function stop() {
     }
 }
 
-export async function follow(guildId, channelId, rId, cronExpr, roleId = null) {
+export async function listSubscriptions(guildId) {
     if(await getGuild(guildId) === null) {
-        console.log("guildId not found:" + guildId);
         throw new Error("Guild not found in database. Please register the guild first.");
     }
 
-    console.log("ID:" + getGuild(guildId));
+    return await getSubscriptionsByGuildId(guildId);
+}
+
+export async function follow(guildId, channelId, rId, cronExpr, roleId = null) {
+    if(await getGuild(guildId) === null) {
+        throw new Error("Guild not found in database. Please register the guild first.");
+    }
 
     return addSubscription(guildId, channelId, rId, cronExpr, roleId = null);
 }

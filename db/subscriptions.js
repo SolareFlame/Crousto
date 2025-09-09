@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
  * @param roleId
  * @returns {Promise<import('@prisma/client').Subscription>}
  */
-export function addSubscription(guildId, channelId, restaurantId, cron, roleId) {
+export async function addSubscription(guildId, channelId, restaurantId, cron, roleId) {
     return prisma.subscription.create({
         data: {
             guildId,
@@ -29,7 +29,7 @@ export function addSubscription(guildId, channelId, restaurantId, cron, roleId) 
  * @param restaurantId
  * @returns {Promise<{ count: number }>} Nombre de subscriptions supprimées
  */
-export function removeSubscription(guildId, channelId, restaurantId) {
+export async function removeSubscription(guildId, channelId, restaurantId) {
     return prisma.subscription.deleteMany({
         where: {
             guildId,
@@ -44,7 +44,7 @@ export function removeSubscription(guildId, channelId, restaurantId) {
  * @param guildId
  * @returns {Promise<import('@prisma/client').Subscription[]>} Tableau des subscriptions
  */
-export function getSubscriptionsByGuild(guildId) {
+export async function getSubscriptionsByGuildId(guildId) {
     return prisma.subscription.findMany({
         where: {
             guildId
@@ -57,11 +57,10 @@ export function getSubscriptionsByGuild(guildId) {
  * @param hour
  * @returns {Promise<import('@prisma/client').Subscription[]>} Tableau des subscriptions
  */
-export function getSubscriptionsForHour(hour) {
-    const pattern = `0 ${hour} * * *`;
+export async function getSubscriptionsForHour(hour) {
     return prisma.subscription.findMany({
         where: {
-            cron: pattern,
+            cron: String(hour),
             active: true
         }
     });
