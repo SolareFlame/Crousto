@@ -34,12 +34,17 @@ export async function renderMenu(restaurant, menu) {
             iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4'
         });
 
-    const button = new ButtonBuilder()
-        .setCustomId('info:' + restaurant.sourceId)
+    const button_info = new ButtonBuilder()
+        .setCustomId('info:' + restaurant.id)
         .setLabel('Plus d\'infos')
         .setStyle(ButtonStyle.Secondary);
 
-    const row = new ActionRowBuilder().addComponents(button);
+    const button_rate = new ButtonBuilder()
+        .setCustomId('rate:' + menu.id)
+        .setLabel('Noter le menu')
+        .setStyle(ButtonStyle.Success);
+
+    const row = new ActionRowBuilder().addComponents(button_info, button_rate);
 
     return {
         embeds: [embedRestaurant, embedMenu],
