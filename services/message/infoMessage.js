@@ -4,6 +4,7 @@ import { EmbedBuilder } from "discord.js";
 import { parseHtml } from "../../utils/data_extractor.js";
 
 export async function renderInfo(restaurant) {
+
     const embed = new EmbedBuilder()
         .setAuthor({
             name: config.data.bot_name,
@@ -12,7 +13,7 @@ export async function renderInfo(restaurant) {
         })
         .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
         .setTitle('Information sur ' + restaurant.title)
-        .setDescription(restaurant.shortDesc)
+        .setDescription(restaurant.shortDesc?.trim() || null)
         .setThumbnail('\n' + restaurant.thumbnailUrl)
         .setTimestamp()
         .setFooter({
@@ -41,6 +42,14 @@ export async function renderInfo(restaurant) {
             "```",
         inline: false
     })
+
+    if(restaurant.avg_rating && restaurant.nb_ratings) {
+        embed.addFields({
+            name: 'Note Moyenne',
+            value: `**${restaurant.avg_rating}** étoiles (${restaurant.nb_ratings} avis)`,
+            inline: true
+        });
+    }
 
     return {
         embeds: [embed]
