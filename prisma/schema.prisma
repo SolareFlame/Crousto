@@ -67,10 +67,9 @@ model Menu {
 
   restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   meals      Meal[]
+  Rate       Rate[]
 
-  // Historisation : plusieurs entrées possibles par (restaurantId, date) si le hash change
   @@unique([restaurantId, date, jsonHash])
-  // Requêtes fréquentes
   @@index([date])
   @@index([restaurantId, date])
   @@index([restaurantId, date, fetchedAt])
@@ -153,6 +152,26 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Rate Rate[]
+}
+
+model Rate {
+  id String @id @default(cuid())
+
+  menuId String
+  userId String
+
+  rating Int // 1 to 5
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  menu Menu @relation(fields: [menuId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, menuId])
+  @@index([menuId, rating])
 }
 
 model Subscription {
