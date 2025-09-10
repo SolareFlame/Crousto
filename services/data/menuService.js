@@ -1,6 +1,6 @@
 import {fetchMenu} from "../../integrations/menus.js";
 import {getTodayDate} from "../../utils/date_loader.js";
-import {findMenuById, setMenu} from "../../db/menu.js";
+import {findMenuByrId, findMenuById, setMenu} from "../../db/menu.js";
 import {getRestaurant} from "./restaurantService.js";
 
 /**
@@ -30,7 +30,7 @@ async function getAPIMenu(rId, date = getTodayDate()){
  * @returns {Promise<Meal|null>}
  */
 export async function getMenu(rId, meal_name, date = getTodayDate()) {
-    let menu = await findMenuById(rId, meal_name, date);
+    let menu = await findMenuByrId(rId, meal_name, date);
 
     // INSERT DB
     if(menu === null) {
@@ -42,11 +42,15 @@ export async function getMenu(rId, meal_name, date = getTodayDate()) {
             console.error('Error saving menu to DB:', error);
         }
 
-        menu = await findMenuById(rId, meal_name, date);
+        menu = await findMenuByrId(rId, meal_name, date);
     }
 
     if(!menu) return null;
     return menu;
+}
+
+export async function getMenuById(mId) {
+    return await findMenuById(mId);
 }
 
 /**
