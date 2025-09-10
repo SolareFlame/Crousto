@@ -35,12 +35,12 @@ export async function renderMenu(restaurant, menu) {
         });
 
     const button_info = new ButtonBuilder()
-        .setCustomId('info:' + restaurant.id)
+        .setCustomId('info_button:' + restaurant.id)
         .setLabel('Plus d\'infos')
         .setStyle(ButtonStyle.Secondary);
 
     const button_rate = new ButtonBuilder()
-        .setCustomId('rate:' + menu.id)
+        .setCustomId('rating_button:' + menu.id)
         .setLabel('Noter le menu')
         .setStyle(ButtonStyle.Success);
 

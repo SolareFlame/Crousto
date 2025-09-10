@@ -1,27 +1,26 @@
 import {PrismaClient} from "@prisma/client";
+
 const prisma = new PrismaClient();
 
 
-export function upsertRate(mId, userId, rate) {
+export function upsertRating(menuId, userId, rating) {
     return prisma.rate.upsert({
         where: {
-            mId_userId: {
-                mId: mId,
-                userId: userId
-            }
+            userId_menuId: { userId, menuId },
         },
         update: {
-            rate: rate
+            rating: Number(rating),
         },
         create: {
-            mId: mId,
-            userId: userId,
-            rate: rate
+            menuId : menuId,
+            userId : userId,
+            rating: Number(rating),
         }
     });
 }
 
-export function findRate(mId, userId) {
+
+export function findRating(mId, userId) {
     return prisma.rate.findUnique({
         where: {
             mId_userId: {
@@ -32,7 +31,7 @@ export function findRate(mId, userId) {
     });
 }
 
-export function findAverageRate(mId) {
+export function findAverageRating(mId) {
     return prisma.rate.aggregate({
         where: {
             mId: mId

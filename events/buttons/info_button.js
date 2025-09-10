@@ -2,7 +2,7 @@ import {renderInfo} from "../../services/message/infoMessage.js";
 import {getRestaurant} from "../../services/data/restaurantService.js";
 
 export default {
-    customId: 'info',
+    customId: 'info_button',
     defer: 'reply',
     async execute(interaction) {
         const restaurant_id = interaction.customId.split(':')[1];

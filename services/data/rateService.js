@@ -1,14 +1,14 @@
-import {findAverageRate, findRate, upsertRate} from "../../db/rate.js";
+import {findAverageRating, findRating, upsertRating} from "../../db/rating.js";
 
 
-export async function rate(mId, userId, rate) {
-    await upsertRate(mId, userId, rate);
+export async function addRating(mId, userId, rating) {
+    return upsertRating(mId, userId, rating);
 }
 
-export async function getRate(mId, userId) {
-    return await findRate(mId, userId);
+export async function getRating(mId, userId) {
+    return findRating(mId, userId);
 }
 
-export async function getAverageRate(mId) {
-    return await findAverageRate(mId);
+export async function getAverageRating(mId) {
+    return findAverageRating(mId);
 }

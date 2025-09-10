@@ -3,7 +3,7 @@ import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilde
 /** @type {Config} */
 import { config } from "../../utils/config_loader.js";
 
-export async function renderRate(follow_list) {
+export async function renderRate(menu) {
     const embed = new EmbedBuilder()
         .setAuthor({
             name: config.data.bot_name,
@@ -14,7 +14,7 @@ export async function renderRate(follow_list) {
         .setTitle("Evaluer le repas")
 
     const select = new StringSelectMenuBuilder()
-        .setCustomId("rate:meal")
+        .setCustomId("rating_select:" + menu.id)
         .setPlaceholder("Selectionne ta note")
         .addOptions(
             ...[1, 2, 3, 4, 5].map(n =>

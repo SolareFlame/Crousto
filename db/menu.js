@@ -61,8 +61,8 @@ import {config} from "../utils/config_loader.js";
  * @returns {Promise<MenuDB|null>}
  */
 
-export async function findMenuById(rId, mealName, isoDate) {
-    console.log('DB called: ', 'findMenuByDate');
+export async function findMenuByrId(rId, mealName, isoDate) {
+    console.log('DB called: ', 'findMenuByrId');
 
     if (!isoDate) throw new Error('isoDate requis (YYYY-MM-DD)');
 
@@ -92,6 +92,25 @@ export async function findMenuById(rId, mealName, isoDate) {
             },
         },
         orderBy: [{ fetchedAt: 'desc' }, { createdAt: 'desc' }],
+    });
+}
+
+export async function findMenuById(mId) {
+    console.log('DB called: ', 'findMenuById');
+
+    return prisma.menu.findUnique({
+        where: { id: mId },
+        include: {
+            meals: {
+                orderBy: { position: 'asc' },
+                include: {
+                    categories: {
+                        orderBy: { position: 'asc' },
+                        include: { dishes: { orderBy: { position: 'asc' } } },
+                    },
+                },
+            },
+        },
     });
 }
 

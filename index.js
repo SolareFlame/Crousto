@@ -46,6 +46,7 @@ client.once('clientReady', async () => {
         await loadEvents();
         await loadCommands(application_id);
         await loadInteraction(client, 'buttons');
+        await loadInteraction(client, 'selects');
 
         await updateGuilds(client);
         await updateRestaurants();
