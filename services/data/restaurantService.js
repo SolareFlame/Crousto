@@ -1,5 +1,6 @@
-import {findAllRestaurants, findRestaurantById, setRestaurant} from "../../db/restaurant.js";
+import {findAllRestaurants, findRestaurantById, findRestaurantBySourceId, setRestaurant} from "../../db/restaurant.js";
 import {fetchRestaurants} from "../../integrations/restaurants.js";
+import {getAverageRestaurantRating} from "./ratingService.js";
 
 /**
  * Retourne un restaurant par son ID.
@@ -24,8 +25,14 @@ export async function getRestaurant(rId) {
         restaurant = await findRestaurantBySourceId(rId);
     }
 
+    const avg_rating = await getAverageRestaurantRating(rId);
+
     if(!restaurant) return null;
-    return restaurant
+    return {
+        ...restaurant,
+        avg_rating: avg_rating._avg.rating,
+        nb_ratings: avg_rating._count.rating
+    }
 }
 
 export async function getAllRestaurants() {
