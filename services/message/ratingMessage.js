@@ -3,7 +3,7 @@ import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilde
 /** @type {Config} */
 import { config } from "../../utils/config_loader.js";
 
-export async function renderRate(menu) {
+export async function renderRating(menu, rating = null) {
     const embed = new EmbedBuilder()
         .setAuthor({
             name: config.data.bot_name,
@@ -24,6 +24,10 @@ export async function renderRate(menu) {
                     .setEmoji("⭐")
             )
         );
+
+    if(rating) {
+        embed.setDescription(`Tu as déjà noté ce repas ${rating.rating} étoile${rating.rating > 1 ? "s" : ""}.`)
+    }
 
     const row = new ActionRowBuilder().addComponents(select);
 

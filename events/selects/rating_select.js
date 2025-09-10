@@ -1,4 +1,4 @@
-import {addRating} from "../../services/data/rateService.js";
+import {addRating} from "../../services/data/ratingService.js";
 
 export default {
     customId: 'rating_select',
@@ -9,6 +9,11 @@ export default {
         const rate = interaction.values[0];
 
         await addRating(mId, userId, rate);
-        return {content: `note de ${rate} étoile${rate > 1 ? 's' : ''} ajoutée.`, ephemeral: true};
+
+        return interaction.editReply(
+            {
+                content: `note de ${rate} étoile${rate > 1 ? 's' : ''} ajoutée.`,
+                ephemeral: true
+            });
     },
 };

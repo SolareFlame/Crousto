@@ -1,6 +1,5 @@
 import {findAverageRating, findRating, upsertRating} from "../../db/rating.js";
 
-
 export async function addRating(mId, userId, rating) {
     return upsertRating(mId, userId, rating);
 }
