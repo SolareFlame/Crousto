@@ -39,12 +39,12 @@ export async function renderMenu(restaurant, menu) {
         .setLabel('Plus d\'infos')
         .setStyle(ButtonStyle.Secondary);
 
-    const button_rate = new ButtonBuilder()
+    const button_rating = new ButtonBuilder()
         .setCustomId('rating_button:' + menu.id)
         .setLabel('Noter le menu')
         .setStyle(ButtonStyle.Success);
 
-    const row = new ActionRowBuilder().addComponents(button_info, button_rate);
+    const row = new ActionRowBuilder().addComponents(button_info, button_rating);
 
     return {
         embeds: [embedRestaurant, embedMenu],

@@ -6,13 +6,13 @@ export default {
     async execute(interaction) {
         const mId = interaction.customId.split(':')[1];
         const userId = interaction.user.id;
-        const rate = interaction.values[0];
+        const rating = interaction.values[0];
 
-        await addRating(mId, userId, rate);
+        await addRating(mId, userId, rating);
 
         return interaction.editReply(
             {
-                content: `note de ${rate} étoile${rate > 1 ? 's' : ''} ajoutée.`,
+                content: `note de ${rating} étoile${rating > 1 ? 's' : ''} ajoutée.`,
                 ephemeral: true
             });
     },
