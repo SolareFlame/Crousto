@@ -1,15 +1,25 @@
+const {findUserById, upsertUser} = await import('../db/user.js');
+
 export default {
     name: 'interactionCreate',
     once: false,
     async execute(interaction) {
-        console.log("NEW Interaction:", interaction.customId);
 
+        // DB USER
+        if (interaction.user) {
+            let user = await findUserById(interaction.user.id);
+            if (!user) {
+                user = await upsertUser(interaction.user.id, interaction.user.username);
+            }
+        }
+
+        // HANDLE INTERACTION
         try {
             if (interaction.isChatInputCommand()) {
                 const cmd = interaction.client.commands.get(interaction.commandName);
                 if (!cmd) return;
 
-                await safeDefer(interaction, { ephemeral: false });
+                await safeDefer(interaction, {ephemeral: false});
                 await cmd.execute(interaction);
                 return;
             }
@@ -30,13 +40,13 @@ export default {
                     if (handler.defer === 'update') {
                         await interaction.deferUpdate();
                     } else if (handler.defer === 'reply') {
-                        await interaction.deferReply({ ephemeral: true });
+                        await interaction.deferReply({ephemeral: true});
                     }
 
                     await handler.execute(interaction);
                 } catch (err) {
                     console.error(err);
-                    await safeReply(interaction, { content: 'Erreur interaction.', ephemeral: true });
+                    await safeReply(interaction, {content: 'Erreur interaction.', ephemeral: true});
                 }
             }
 
@@ -49,13 +59,13 @@ export default {
                     if (handler.defer === 'update') {
                         await interaction.deferUpdate();
                     } else if (handler.defer === 'reply') {
-                        await interaction.deferReply({ ephemeral: true });
+                        await interaction.deferReply({ephemeral: true});
                     }
 
                     await handler.execute(interaction);
                 } catch (err) {
                     console.error(err);
-                    await safeReply(interaction, { content: 'Erreur interaction.', ephemeral: true });
+                    await safeReply(interaction, {content: 'Erreur interaction.', ephemeral: true});
                 }
             }
 
@@ -72,7 +82,7 @@ export default {
 /**
  * Safely defers a reply to an interaction if it hasn't been deferred or replied to yet.
  */
-async function safeDefer(interaction, options = { ephemeral: true }) {
+async function safeDefer(interaction, options = {ephemeral: true}) {
     if (interaction.deferred || interaction.replied) return;
     if (interaction.isButton?.()) return;
 
