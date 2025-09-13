@@ -12,7 +12,7 @@ import {formatMenu} from "../data/menuService.js";
  * @param menu
  * @returns {Promise<{embeds: EmbedBuilder[], components: ActionRowBuilder[]}>}
  */
-export async function renderMenu(restaurant, menu) {
+export async function renderMenu(restaurant, menu = null) {
     const embedRestaurant = new EmbedBuilder()
         .setAuthor({
             name: config.data.bot_name,
@@ -34,17 +34,22 @@ export async function renderMenu(restaurant, menu) {
             iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4'
         });
 
+
     const button_info = new ButtonBuilder()
         .setCustomId('info_button:' + restaurant.id)
         .setLabel('Plus d\'infos')
         .setStyle(ButtonStyle.Secondary);
 
-    const button_rating = new ButtonBuilder()
-        .setCustomId('rating_button:' + menu.id)
-        .setLabel('Noter le menu')
-        .setStyle(ButtonStyle.Success);
+    const row = new ActionRowBuilder().addComponents(button_info)
 
-    const row = new ActionRowBuilder().addComponents(button_info, button_rating);
+    if(menu) {
+        const button_rating = new ButtonBuilder()
+            .setCustomId('rating_button:' + menu.id)
+            .setLabel('Noter le menu')
+            .setStyle(ButtonStyle.Success);
+
+        row.addComponents(button_rating);
+    }
 
     return {
         embeds: [embedRestaurant, embedMenu],
