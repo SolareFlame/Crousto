@@ -65,9 +65,10 @@ model Menu {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  meals      Meal[]
-  ratings    Rating[]
+  restaurant      Restaurant        @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  meals           Meal[]
+  ratings         Rating[]
+  TokenOccurrence TokenOccurrence[]
 
   @@unique([restaurantId, date, jsonHash])
   @@index([date])
@@ -76,9 +77,6 @@ model Menu {
   @@index([restaurantId, date, sourceId])
 }
 
-/**
- * API STRUCTURE: A meal corresponds to a meal in a day (in Menu)
- */
 model Meal {
   id       String @id @default(cuid())
   menuId   String
@@ -96,9 +94,6 @@ model Meal {
   @@index([menuId])
 }
 
-/**
- * API STRUCTURE: A category corresponds to a section of a meal (in Meal)
- */
 model Category {
   id       String @id @default(cuid())
   mealId   String
@@ -116,9 +111,6 @@ model Category {
   @@index([mealId])
 }
 
-/**
- * API STRUCTURE: A dish corresponds to a plate of a category (in Category)
- */
 model Dish {
   id         String @id @default(cuid())
   categoryId String
@@ -195,4 +187,51 @@ model Subscription {
 
   @@index([active, cron])
   @@index([guildId, active])
+}
+
+// ==========================================
+//                  STATS
+// ==========================================
+
+model TokenOccurrence {
+  id String @id @default(cuid())
+
+  token String
+  label String
+
+  menuId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menu Menu @relation(fields: [menuId], references: [id])
+
+  ClusterAffectation ClusterAffectation[]
+  TokenCluster       TokenCluster[]
+
+  @@index([token])
+  @@index([menuId])
+}
+
+// GENERATED AT EACH STATS REFRESH
+model TokenCluster {
+  id Int @id @default(autoincrement())
+
+  masterTokenId String?
+  masterToken   TokenOccurrence? @relation(fields: [masterTokenId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  members ClusterAffectation[]
+}
+
+model ClusterAffectation {
+  id    Int @id @default(autoincrement())
+  count Int
+
+  tokenId String
+  token   TokenOccurrence @relation(fields: [tokenId], references: [id])
+
+  clusterId Int
+  cluster   TokenCluster @relation(fields: [clusterId], references: [id])
 }
