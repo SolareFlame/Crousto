@@ -61,6 +61,7 @@ const __dirname  = path.dirname(__filename);
  * @property {string} bot_name
  * @property {string} github_url
  * @property {string} cron_subscription
+ * @property {string} cron_daily_fetch
  */
 
 /**
