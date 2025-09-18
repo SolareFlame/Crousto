@@ -14,7 +14,7 @@ import {Routes} from "discord-api-types/v10";
 
 import {updateRestaurants} from "./services/data/restaurantService.js";
 import {loadFile} from "./utils/md_loader.js";
-import {start} from "./services/data/subService.js";
+import {start} from "./services/cron/subCron.js";
 import {addGuild} from "./services/data/guildService.js";
 
 config();
