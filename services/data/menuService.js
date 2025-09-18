@@ -1,6 +1,6 @@
 import {fetchMenu} from "../../integrations/menus.js";
 import {getTodayDate} from "../../utils/date_loader.js";
-import {findMenuByrId, findMenuById, setMenu} from "../../db/menu.js";
+import {findMenuByrId, findMenuById, setMenu, countMenus} from "../../db/menu.js";
 import {getRestaurant} from "./restaurantService.js";
 
 /**
@@ -67,6 +67,10 @@ export async function getMenuById(mId) {
     return await findMenuById(mId);
 }
 
+export async function getTotalMenus() {
+    return countMenus();
+}
+
 /**
  * Formate un menu depuis la DB (include: meals.categories.dishes).
  * @param {MenuDB|null} menu - Objet Menu Prisma.
@@ -99,3 +103,4 @@ export function formatMenu(menu, meal_name = 'midi') {
 
     return blocks.length ? blocks.join('\n\n') : 'Aucun menu disponible';
 }
+

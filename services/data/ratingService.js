@@ -1,4 +1,5 @@
 import {
+    countRatings,
     findAverageMenuRating,
     findAverageRestaurantRating,
     findAverageUserRating,
@@ -24,4 +25,8 @@ export async function getAverageUserRating(userId) {
 
 export async function getAverageRestaurantRating(restaurantId) {
     return findAverageRestaurantRating(restaurantId);
+}
+
+export async function getTotalRatings() {
+    return countRatings()
 }

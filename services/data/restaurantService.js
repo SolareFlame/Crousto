@@ -1,6 +1,13 @@
-import {findAllRestaurants, findRestaurantById, findRestaurantBySourceId, setRestaurant} from "../../db/restaurant.js";
+import {
+    countRestaurants,
+    findAllRestaurants,
+    findRestaurantById,
+    findRestaurantBySourceId,
+    setRestaurant
+} from "../../db/restaurant.js";
 import {fetchRestaurants} from "../../integrations/restaurants.js";
 import {getAverageRestaurantRating} from "./ratingService.js";
+import {countMenus} from "../../db/menu.js";
 
 /**
  * Retourne un restaurant par son ID.
@@ -50,4 +57,8 @@ export async function updateRestaurants(_logs = false) {
             console.error(`Error upserting restaurant ${item.title}:`, error);
         }
     }
+}
+
+export async function getTotalRestaurants() {
+    return countRestaurants();
 }

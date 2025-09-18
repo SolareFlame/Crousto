@@ -1,4 +1,6 @@
 import {upsertGuild} from "../../db/guild.js";
+import {countMenus} from "../../db/menu.js";
+
 
 export async function addGuild(guildId, client) {
     const guild = await client.guilds.fetch(guildId);
@@ -15,4 +17,8 @@ export async function addGuild(guildId, client) {
     } catch (error) {
         console.error(`GuildService: Error adding/updating guild ${name} (${guildId}):`, error);
     }
+}
+
+export async function getTotalGuilds() {
+    return countMenus();
 }
