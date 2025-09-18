@@ -20,3 +20,7 @@ export function upsertUser(id, name) {
         }
     });
 }
+
+export async function countUsers() {
+    return prisma.user.count();
+}

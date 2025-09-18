@@ -154,3 +154,7 @@ export async function setRestaurant(item) {
         include: { plannings: true },
     });
 }
+
+export async function countRestaurants() {
+    return prisma.restaurant.count();
+}

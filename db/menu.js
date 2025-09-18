@@ -188,3 +188,7 @@ export async function setMenu(rId, item) {
         },
     });
 }
+
+export async function countMenus() {
+    return prisma.menu.count();
+}

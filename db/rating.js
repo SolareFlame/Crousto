@@ -70,3 +70,7 @@ export function findAverageRestaurantRating(restaurantId) {
         }
     });
 }
+
+export async function countRatings() {
+    return prisma.rating.count();
+}

@@ -20,3 +20,7 @@ export async function getGuild(guildId) {
         where: {guildId},
     });
 }
+
+export async function countGuilds() {
+    return prisma.guild.count();
+}
