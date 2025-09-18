@@ -62,8 +62,6 @@ import {config} from "../utils/config_loader.js";
  */
 
 export async function findMenuByrId(rId, mealName, isoDate) {
-    console.log('DB called: ', 'findMenuByrId');
-
     if (!isoDate) throw new Error('isoDate requis (YYYY-MM-DD)');
 
     const ttl = Number(config.db_cache.menu_validity_time);
@@ -96,8 +94,6 @@ export async function findMenuByrId(rId, mealName, isoDate) {
 }
 
 export async function findMenuById(mId) {
-    console.log('DB called: ', 'findMenuById');
-
     return prisma.menu.findUnique({
         where: { id: mId },
         include: {
@@ -117,11 +113,10 @@ export async function findMenuById(mId) {
 
 /**
  * Crée ou met à jour un restaurant et ses plannings.
- * @param {number|string} rId  ID du restaurant (Restaurant.sourceId)
+ * @param {number|string} rId  ID du restaurant (Restaurant.id)
  * @param {object} item              Menu API: { id, date, meal: [...] }
  */
 export async function setMenu(rId, item) {
-    console.log('DB called: ', 'setMenu');
 
     const restaurant = await prisma.restaurant.findUnique({
         where: { id: rId },

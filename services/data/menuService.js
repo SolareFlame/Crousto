@@ -10,7 +10,7 @@ import {getRestaurant} from "./restaurantService.js";
  * @param date
  * @returns {Promise<Menu|null>}
  */
-async function getAPIMenu(rId, date = getTodayDate()){
+export async function getAPIMenuByDate(rId, date = getTodayDate()){
     if (!date) throw new Error('date format ISO requis (YYYY-MM-DD)');
 
     const rSourceId = (await getRestaurant(rId)).sourceId;
@@ -22,6 +22,20 @@ async function getAPIMenu(rId, date = getTodayDate()){
 }
 
 /**
+ * Retourne les menus d'un restaurant
+ *
+ * @param {string|number} rId
+ * @param _logs
+ * @returns {Promise<Menu|null>}
+ */
+export async function getAPIMenus(rId, _logs = false) {
+    const rSourceId = (await getRestaurant(rId)).sourceId;
+
+    const found = await fetchMenu(rSourceId, _logs);
+    return found || null;
+}
+
+/**
  * Retourne le menu avec le contenu du repas directement spécifié dans "menu.meal".
  *
  * @param rId
@@ -29,12 +43,12 @@ async function getAPIMenu(rId, date = getTodayDate()){
  * @param date
  * @returns {Promise<Meal|null>}
  */
-export async function getMenu(rId, meal_name, date = getTodayDate()) {
+export async function getMenu(rId, meal_name = 'midi', date = getTodayDate()) {
     let menu = await findMenuByrId(rId, meal_name, date);
 
     // INSERT DB
     if(menu === null) {
-        const menu_row = await getAPIMenu(rId, date);
+        const menu_row = await getAPIMenuByDate(rId, date);
 
         try {
             if(menu_row) await setMenu(rId, menu_row);

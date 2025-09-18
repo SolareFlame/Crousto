@@ -38,8 +38,6 @@ import {config} from "../utils/config_loader.js";
  * @returns {Promise<RestaurantDB[]>}
  */
 export function findAllRestaurants() {
-    console.log('DB called: ', 'findAllRestaurants');
-
     return prisma.restaurant.findMany({
         include: {
             plannings: { orderBy: { weekday: 'asc' } },
@@ -54,8 +52,6 @@ export function findAllRestaurants() {
  * @returns {Promise<RestaurantDB>}
  */
 export async function findRestaurantBySourceId(rSourceId) {
-    console.log('DB called: ', 'findRestaurantBySourceId');
-
     const ttl = Number(config.db_cache.restaurant_validity_time);
     const threshold = new Date(Date.now() - ttl * 1000);
 
@@ -68,8 +64,6 @@ export async function findRestaurantBySourceId(rSourceId) {
 }
 
 export async function findRestaurantById(rId) {
-    console.log('DB called: ', 'findRestaurantById');
-
     const ttl = Number(config.db_cache.restaurant_validity_time);
     const threshold = new Date(Date.now() - ttl * 1000);
 
@@ -86,11 +80,8 @@ export async function findRestaurantById(rId) {
 /**
  * Crée ou met à jour un restaurant et ses plannings.
  * @param {object} item - objet restaurant de l'API (voir exemple dans ton message)
- * @param _logs {boolean} [true] - Activer/Désactiver les logs console
  */
-export async function setRestaurant(item, _logs = false) {
-    if(_logs) console.log('DB called: ', 'setRestaurant');
-
+export async function setRestaurant(item) {
     const sourceId = Number(item.id);
     const title = item.title ?? '';
     const zone = item.zone ?? null;
