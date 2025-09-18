@@ -14,8 +14,11 @@ import {Routes} from "discord-api-types/v10";
 
 import {updateRestaurants} from "./services/data/restaurantService.js";
 import {loadFile} from "./utils/md_loader.js";
-import {start} from "./services/cron/subCron.js";
 import {addGuild} from "./services/data/guildService.js";
+
+import {SubscriptionScheduler} from "./services/cron/subCron.js";
+import {DailyFetchScheduler} from "./services/cron/dailyFetchCron.js";
+
 
 config();
 
@@ -51,7 +54,9 @@ client.once('clientReady', async () => {
         await updateGuilds(client);
         await updateRestaurants();
 
-        start(client);
+        SubscriptionScheduler.start(client);
+        DailyFetchScheduler.start();
+
     } catch (error) {
         console.error('Stating: ERROR=', error);
     }
@@ -59,6 +64,10 @@ client.once('clientReady', async () => {
 
 client.login(process.env.DISCORD_TOKEN).catch(console.error);
 
+
+// ========================
+//         LOADERS
+// ========================
 
 async function loadEvents() {
     const events_path = path.join(__dirname, 'events');
