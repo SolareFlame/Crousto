@@ -29,6 +29,7 @@ export async function renderMenu(restaurant, menu = null) {
         .setTitle('Menu du ' + renderDate(menu?.date ?? renderDate(new Date())))
         .setDescription(formatMenu(menu))
         .setTimestamp()
+        .setImage(config.visuals.banners.rating)
         .setFooter({
             text: `${config.data.bot_name} by Solare`,
             iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4'
