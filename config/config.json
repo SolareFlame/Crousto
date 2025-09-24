@@ -18,14 +18,16 @@
   "visuals": {
     "colors": {
       "primary": "0xFAAF18",
-      "rating": "0x00863A"
+      "menu_rating": "0x00863A",
+      "restaurant_rating": "0x0055B3"
     },
     "logos": {
       "default": "https://imgur.com/wm8X6O9.png"
     },
     "banners": {
       "default": "https://imgur.com/cVOEQbd.png",
-      "rating": "https://imgur.com/zBhTIRZ.png"
+      "rating_menu": "https://imgur.com/zBhTIRZ.png",
+      "rating_restaurant": "https://imgur.com/38p7mBk.png"
     },
     "emojis": {
       "star": "1418562735452586054"
