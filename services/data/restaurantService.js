@@ -19,12 +19,12 @@ export async function getRestaurantById(rId) {
     let restaurant = await findRestaurantById(rId)
 
     // INSERT DB
-    if(restaurant === null) {
+    if (restaurant === null) {
         const list = await fetchRestaurants();
         const restaurant_raw = list.find(r => r.id === rId) ?? null;
 
         try {
-            if(restaurant_raw) await setRestaurant(restaurant_raw)
+            if (restaurant_raw) await setRestaurant(restaurant_raw)
         } catch (error) {
             console.error('Error saving restaurant to DB:', error);
         }
@@ -32,14 +32,17 @@ export async function getRestaurantById(rId) {
         restaurant = await findRestaurantById(rId);
     }
 
-    const avg_rating = await getAverageMenuRestaurantRating(rId);
+    const menu_rating = await getAverageMenuRestaurantRating(rId);
+    const restaurant_rating = await getAverageMenuRestaurantRating(rId);
 
-    if(!restaurant) return null;
+    if (!restaurant) return null;
     return {
         ...restaurant,
-        avg_rating: avg_rating._avg.rating,
-        nb_ratings: avg_rating._count.rating
-    }
+        avg_menu_rating: menu_rating._avg.rating,
+        nb_menu_ratings: menu_rating._count.rating,
+        avg_restaurant_rating: restaurant_rating._avg.rating,
+        nb_restaurant_ratings: restaurant_rating._count.rating,
+    };
 }
 
 export async function getAllRestaurants() {

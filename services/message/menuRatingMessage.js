@@ -16,7 +16,7 @@ export async function renderMenuRating(menu, rating = null) {
                 new StringSelectMenuOptionBuilder()
                     .setLabel(`${n} étoile${n > 1 ? "s" : ""}`)
                     .setValue(String(n))
-                    .setEmoji({ id: config.visuals.emojis.star, name: "star" })
+                    .setEmoji({ id: config.visuals.emojis.menu_star, name: "menu_star" })
                     .setDefault(rating?.rating === n)
             )
         );

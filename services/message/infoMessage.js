@@ -44,14 +44,21 @@ export async function renderInfo(restaurant) {
         inline: false
     })
 
-    if(restaurant.avg_rating && restaurant.nb_ratings) {
+    if(restaurant.avg_menu_rating && restaurant.nb_menu_ratings) {
         embed.addFields({
-            name: 'Note Moyenne',
-            value: `**${restaurant.avg_rating}** étoiles (${restaurant.nb_ratings} avis)`,
-            inline: true
+            name: '<:menu_star:' + config.visuals.emojis.menu_star + '> Note moyenne des menus',
+            value: `**${restaurant.avg_menu_rating}** étoiles (${restaurant.nb_menu_ratings} avis)`,
+            inline: false
         });
     }
 
+    if(restaurant.avg_restaurant_rating && restaurant.nb_restaurant_ratings) {
+        embed.addFields({
+            name: '<:restaurant_star:' + config.visuals.emojis.restaurant_star + '> Note moyenne du restaurant',
+            value: `**${restaurant.avg_restaurant_rating}** étoiles (${restaurant.nb_restaurant_ratings} avis)`,
+            inline: false
+        });
+    }
 
     const button_rating = new ButtonBuilder()
         .setCustomId('rating_restaurant_button:' + restaurant.id)

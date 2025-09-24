@@ -30,7 +30,9 @@
       "rating_restaurant": "https://imgur.com/38p7mBk.png"
     },
     "emojis": {
-      "star": "1418562735452586054"
+      "menu_star": "1418562735452586054",
+      "restaurant_star": "1420361234494263356"
+
     }
   },
   "data": {
