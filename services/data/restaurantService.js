@@ -6,7 +6,7 @@ import {
     setRestaurant
 } from "../../db/restaurant.js";
 import {fetchRestaurants} from "../../integrations/restaurants.js";
-import {getAverageRestaurantRating} from "./ratingService.js";
+import {getAverageMenuRestaurantRating} from "./menuRatingService.js";
 import {countMenus} from "../../db/menu.js";
 
 /**
@@ -15,7 +15,7 @@ import {countMenus} from "../../db/menu.js";
  * @param {number|string} rId
  * @returns {Promise<RestaurantDB|null>}
  */
-export async function getRestaurant(rId) {
+export async function getRestaurantById(rId) {
     let restaurant = await findRestaurantById(rId)
 
     // INSERT DB
@@ -29,10 +29,10 @@ export async function getRestaurant(rId) {
             console.error('Error saving restaurant to DB:', error);
         }
 
-        restaurant = await findRestaurantBySourceId(rId);
+        restaurant = await findRestaurantById(rId);
     }
 
-    const avg_rating = await getAverageRestaurantRating(rId);
+    const avg_rating = await getAverageMenuRestaurantRating(rId);
 
     if(!restaurant) return null;
     return {

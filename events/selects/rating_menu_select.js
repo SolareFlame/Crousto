@@ -1,14 +1,14 @@
-import {addRating} from "../../services/data/ratingService.js";
+import {addMenuRating} from "../../services/data/menuRatingService.js";
 
 export default {
-    customId: 'rating_select',
+    customId: 'rating_menu_select',
     defer: 'update',
     async execute(interaction) {
         const mId = interaction.customId.split(':')[1];
         const userId = interaction.user.id;
         const rating = interaction.values[0];
 
-        await addRating(mId, userId, rating);
+        await addMenuRating(mId, userId, rating);
 
         return interaction.editReply(
             {

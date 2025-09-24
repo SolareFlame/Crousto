@@ -3,13 +3,13 @@ import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilde
 /** @type {Config} */
 import { config } from "../../utils/config_loader.js";
 
-export async function renderRating(menu, rating = null) {
+export async function renderMenuRating(menu, rating = null) {
     const embed = new EmbedBuilder()
-        .setColor(parseInt(config.visuals.colors.rating) ?? 0xFFF)
+        .setColor(parseInt(config.visuals.colors.menu_rating) ?? 0xFFF)
         .setTitle("Noter ce menu")
 
     const select = new StringSelectMenuBuilder()
-        .setCustomId("rating_select:" + menu.id)
+        .setCustomId("rating_menu_select:" + menu.id)
         .setPlaceholder("Sélectionnez une note...")
         .addOptions(
             ...[1, 2, 3, 4, 5].map(n =>

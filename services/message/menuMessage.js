@@ -29,11 +29,12 @@ export async function renderMenu(restaurant, menu = null) {
         .setTitle('Menu du ' + renderDate(menu?.date ?? renderDate(new Date())))
         .setDescription(formatMenu(menu))
         .setTimestamp()
-        .setImage(config.visuals.banners.rating)
         .setFooter({
             text: `${config.data.bot_name} by Solare`,
             iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4'
         });
+
+    if(menu) embedMenu.setImage(config.visuals.banners.rating_menu)
 
 
     const button_info = new ButtonBuilder()
@@ -45,7 +46,7 @@ export async function renderMenu(restaurant, menu = null) {
 
     if(menu) {
         const button_rating = new ButtonBuilder()
-            .setCustomId('rating_button:' + menu.id)
+            .setCustomId('rating_menu_button:' + menu.id)
             .setLabel('Noter le menu')
             .setStyle(ButtonStyle.Success);
 

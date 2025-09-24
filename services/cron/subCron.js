@@ -2,7 +2,7 @@ import {config} from "../../utils/config_loader.js";
 import cron from "node-cron";
 import {getSubscriptionsForHour} from "../../db/subscriptions.js";
 import {getMenu} from "../data/menuService.js";
-import {getRestaurant} from "../data/restaurantService.js";
+import {getRestaurantById} from "../data/restaurantService.js";
 import {renderMenu} from "../message/menuMessage.js";
 
 export const SubscriptionScheduler = {
@@ -41,7 +41,7 @@ export const SubscriptionScheduler = {
                                 continue;
                             }
 
-                            const restaurant = await getRestaurant(sub.restaurantId);
+                            const restaurant = await getRestaurantById(sub.restaurantId);
                             let render = await renderMenu(restaurant, menu);
                             render.content = sub.roleId ? `<@&${sub.roleId}>` : undefined;
 

@@ -5,7 +5,7 @@ import {getTotalGuilds} from "../services/data/guildService.js";
 import {getTotalRestaurants} from "../services/data/restaurantService.js";
 import {getTotalMenus} from "../services/data/menuService.js";
 import {getTotalUsers} from "../services/data/userService.js";
-import {getTotalRatings} from "../services/data/ratingService.js";
+import {getTotalMenuRatings} from "../services/data/menuRatingService.js";
 import {renderStats} from "../services/message/statsMessage.js";
 
 export default {
@@ -29,7 +29,7 @@ export default {
             },
             {
                 name: "ratings",
-                value: await getTotalRatings(),
+                value: await getTotalMenuRatings(),
             },
             {
                 name: "users",

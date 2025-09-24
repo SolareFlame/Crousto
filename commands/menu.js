@@ -1,5 +1,5 @@
 import {SlashCommandBuilder} from "discord.js";
-import {getAllRestaurants, getRestaurant} from "../services/data/restaurantService.js";
+import {getAllRestaurants, getRestaurantById} from "../services/data/restaurantService.js";
 import {getMenu} from "../services/data/menuService.js";
 import {renderMenu} from "../services/message/menuMessage.js";
 
@@ -45,7 +45,7 @@ export default {
         const meal_name = interaction.options.getString('repas') ?? 'midi';
 
         const menu = await getMenu(restaurant_id, meal_name);
-        const restaurant = await getRestaurant(restaurant_id)
+        const restaurant = await getRestaurantById(restaurant_id)
 
         const render = await renderMenu(restaurant, menu);
         await interaction.editReply(render);

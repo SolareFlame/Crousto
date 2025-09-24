@@ -1,6 +1,6 @@
 /** @type {Config} */
 import { config } from '../../utils/config_loader.js';
-import { EmbedBuilder } from "discord.js";
+import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder} from "discord.js";
 import { parseHtml } from "../../utils/data_extractor.js";
 
 export async function renderInfo(restaurant) {
@@ -16,6 +16,7 @@ export async function renderInfo(restaurant) {
         .setDescription(restaurant.shortDesc?.trim() || null)
         .setThumbnail('\n' + restaurant.thumbnailUrl)
         .setTimestamp()
+        .setImage(config.visuals.banners.rating_restaurant)
         .setFooter({
             text: `${config.data.bot_name} by Solare`,
             iconURL: 'https://avatars.githubusercontent.com/u/88492960?v=4'
@@ -51,7 +52,16 @@ export async function renderInfo(restaurant) {
         });
     }
 
+
+    const button_rating = new ButtonBuilder()
+        .setCustomId('rating_restaurant_button:' + restaurant.id)
+        .setLabel('Noter le restaurant')
+        .setStyle(ButtonStyle.Primary);
+
+    const row = new ActionRowBuilder().addComponents(button_rating)
+
     return {
-        embeds: [embed]
+        embeds: [embed],
+        components: [row]
     }
 }

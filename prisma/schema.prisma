@@ -27,9 +27,10 @@ model Restaurant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  menus         Menu[]
-  subscriptions Subscription[]
-  plannings     Planning[]
+  menus            Menu[]
+  subscriptions    Subscription[]
+  plannings        Planning[]
+  RestaurantRating RestaurantRating[]
 
   @@index([title])
   @@index([zone])
@@ -67,7 +68,7 @@ model Menu {
 
   restaurant      Restaurant        @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   meals           Meal[]
-  ratings         Rating[]
+  ratings         MenuRating[]
   TokenOccurrence TokenOccurrence[]
 
   @@unique([restaurantId, date, jsonHash])
@@ -145,10 +146,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  ratings Rating[]
+  ratings MenuRating[]
+
+  RestaurantRating RestaurantRating[]
 }
 
-model Rating {
+model MenuRating {
   id String @id @default(cuid())
 
   menuId String
@@ -164,6 +167,24 @@ model Rating {
 
   @@unique([userId, menuId])
   @@index([menuId, rating])
+}
+
+model RestaurantRating {
+  id String @id @default(cuid())
+
+  restaurantId String
+  userId       String
+
+  rating Int // 1 to 5
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user       User       @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, restaurantId])
+  @@index([restaurantId, rating])
 }
 
 model Subscription {

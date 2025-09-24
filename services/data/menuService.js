@@ -1,7 +1,7 @@
 import {fetchMenu} from "../../integrations/menus.js";
 import {getTodayDate} from "../../utils/date_loader.js";
 import {findMenuByrId, findMenuById, setMenu, countMenus} from "../../db/menu.js";
-import {getRestaurant} from "./restaurantService.js";
+import {getRestaurantById} from "./restaurantService.js";
 
 /**
  * Retourne le menu d'un restaurant pour une date ISO (YYYY-MM-DD).
@@ -13,7 +13,7 @@ import {getRestaurant} from "./restaurantService.js";
 export async function getAPIMenuByDate(rId, date = getTodayDate()){
     if (!date) throw new Error('date format ISO requis (YYYY-MM-DD)');
 
-    const rSourceId = (await getRestaurant(rId)).sourceId;
+    const rSourceId = (await getRestaurantById(rId)).sourceId;
 
     const rows = await fetchMenu(rSourceId);
     const found = rows.find(r => r.date === date);
@@ -29,7 +29,7 @@ export async function getAPIMenuByDate(rId, date = getTodayDate()){
  * @returns {Promise<Menu|null>}
  */
 export async function getAPIMenus(rId, _logs = false) {
-    const rSourceId = (await getRestaurant(rId)).sourceId;
+    const rSourceId = (await getRestaurantById(rId)).sourceId;
 
     const found = await fetchMenu(rSourceId, _logs);
     return found || null;
