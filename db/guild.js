@@ -1,5 +1,4 @@
-import {PrismaClient} from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "./client.js";
 
 export function upsertGuild(guildId, name, ownerId) {
     return prisma.guild.upsert({

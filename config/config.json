@@ -39,7 +39,7 @@
     "bot_name": "Crousto",
     "github_url": "https://github.com/SolareFlame/Crousto",
     "cron_subscription": "*/1 * * * *",
-    "cron_daily_fetch": "*0 6 * * *"
+    "cron_daily_fetch": "0 6 * * *"
   },
   "db_cache" : {
     "menu_validity_time": 60,

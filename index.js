@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
+dotenvExpand.expand(dotenv.config());
+
 import {fileURLToPath, pathToFileURL} from "url";
 import path from 'path';
 
@@ -5,7 +9,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import {Client, GatewayIntentBits, Collection} from "discord.js";
-import {config} from "dotenv";
 
 import {readdirSync} from "fs";
 
@@ -19,8 +22,6 @@ import {addGuild} from "./services/data/guildService.js";
 import {SubscriptionScheduler} from "./services/cron/subCron.js";
 import {DailyFetchScheduler} from "./services/cron/dailyFetchCron.js";
 
-
-config();
 
 const client = new Client({
     intents: [

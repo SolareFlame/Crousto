@@ -1,5 +1,4 @@
-import {countGuilds, upsertGuild} from "../../db/guild.js";
-import {countMenus} from "../../db/menu.js";
+import {upsertGuild} from "../../db/guild.js";
 
 
 export async function addGuild(guildId, client) {
@@ -19,6 +18,3 @@ export async function addGuild(guildId, client) {
     }
 }
 
-export async function getTotalGuilds() {
-    return countGuilds();
-}

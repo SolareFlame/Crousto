@@ -1,6 +1,6 @@
 import {fetchMenu} from "../../integrations/menus.js";
 import {getTodayDate} from "../../utils/date_loader.js";
-import {findMenuByrId, findMenuById, setMenu, countMenus} from "../../db/menu.js";
+import {findMenuByrId, findMenuById, setMenu} from "../../db/menu.js";
 import {getRestaurantById} from "./restaurantService.js";
 
 /**
@@ -65,10 +65,6 @@ export async function getMenu(rId, meal_name = 'midi', date = getTodayDate()) {
 
 export async function getMenuById(mId) {
     return await findMenuById(mId);
-}
-
-export async function getTotalMenus() {
-    return countMenus();
 }
 
 /**

@@ -1,5 +1,4 @@
-import {PrismaClient} from "@prisma/client";
-const prisma = new PrismaClient(/*{ log: ['query','error','warn'] }*/);
+import prisma from "./client.js";
 
 /**
  * Add a new subscription

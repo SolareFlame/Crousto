@@ -1,5 +1,4 @@
 import {
-    countMenuRatings,
     findAverageMenuRestaurantRating,
     findMenuRating,
     upsertMenuRating
@@ -18,6 +17,3 @@ export async function getAverageMenuRestaurantRating(restaurantId) {
     return findAverageMenuRestaurantRating(restaurantId);
 }
 
-export async function getTotalMenuRatings() {
-    return countMenuRatings()
-}

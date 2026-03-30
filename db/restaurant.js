@@ -1,5 +1,4 @@
-import {PrismaClient} from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "./client.js";
 
 import crypto from "crypto";
 import {config} from "../utils/config_loader.js";
