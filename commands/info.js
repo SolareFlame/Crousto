@@ -33,7 +33,13 @@ export default {
 
     async execute(interaction) {
         const restaurant_id = interaction.options.getString('id');
-        const restaurant = await getRestaurantById(restaurant_id)
+        const restaurant = restaurant_id ? await getRestaurantById(restaurant_id) : null;
+        if (!restaurant) {
+            await interaction.editReply({
+                content: "Restaurant introuvable. Choisis une suggestion dans la liste plutôt que de taper le nom à la main.",
+            });
+            return;
+        }
 
         const render = await renderInfo(restaurant);
         await interaction.editReply(render);

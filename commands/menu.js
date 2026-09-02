@@ -44,8 +44,15 @@ export default {
         const restaurant_id = interaction.options.getString('restaurant');
         const meal_name = interaction.options.getString('repas') ?? 'midi';
 
+        const restaurant = restaurant_id ? await getRestaurantById(restaurant_id) : null;
+        if (!restaurant) {
+            await interaction.editReply({
+                content: "Restaurant introuvable. Choisis une suggestion dans la liste plutôt que de taper le nom à la main.",
+            });
+            return;
+        }
+
         const menu = await getMenu(restaurant_id, meal_name);
-        const restaurant = await getRestaurantById(restaurant_id)
 
         const render = await renderMenu(restaurant, menu);
         await interaction.editReply(render);
