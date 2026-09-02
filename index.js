@@ -115,10 +115,22 @@ async function loadCommands(app_id) {
         commands_json.push(command.data.toJSON());
     }
 
+    // Les commandes globales sont visibles sur tous les serveurs (propagation
+    // pouvant aller jusqu'à ~1h). En dev on pousse aussi sur la guild de test,
+    // où l'enregistrement est instantané.
     await rest.put(
-        Routes.applicationGuildCommands(app_id, process.env.DEV_GUILD_ID),
+        Routes.applicationCommands(app_id),
         {body: commands_json}
     );
+
+    if (process.env.DEV_GUILD_ID) {
+        // Hors dev on vide les commandes de guild : sinon elles resteraient
+        // figées sur une ancienne version et feraient doublon avec les globales.
+        await rest.put(
+            Routes.applicationGuildCommands(app_id, process.env.DEV_GUILD_ID),
+            {body: process.env.NODE_ENV === 'development' ? commands_json : []}
+        );
+    }
 
     console.log("Starting: All commands loaded.");
 }
