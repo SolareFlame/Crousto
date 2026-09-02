@@ -10,9 +10,10 @@ import {formatMenu} from "../data/menuService.js";
  *
  * @param restaurant
  * @param menu
+ * @param date - Date ISO (YYYY-MM-DD) affichée si aucun menu n'est disponible.
  * @returns {Promise<{embeds: EmbedBuilder[], components: ActionRowBuilder[]}>}
  */
-export async function renderMenu(restaurant, menu = null) {
+export async function renderMenu(restaurant, menu = null, date = null) {
     const embedRestaurant = new EmbedBuilder()
         .setAuthor({
             name: config.data.bot_name,
@@ -26,7 +27,7 @@ export async function renderMenu(restaurant, menu = null) {
 
     const embedMenu = new EmbedBuilder()
         .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
-        .setTitle('Menu du ' + renderDate(menu?.date ?? new Date()))
+        .setTitle('Menu du ' + renderDate(menu?.date ?? date ?? new Date()))
         .setDescription(formatMenu(menu))
         .setTimestamp()
         .setFooter({
