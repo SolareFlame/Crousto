@@ -5,12 +5,33 @@ export default {
     once: false,
     async execute(interaction) {
 
-        // DB USER
-        if (interaction.user) {
-            let user = await findUserById(interaction.user.id);
-            if (!user) {
-                user = await upsertUser(interaction.user.id, interaction.user.username);
+        // AUTOCOMPLETE
+        // Traité en premier: Discord n'accorde que 3s pour répondre, et il est
+        // envoyé à chaque frappe. On évite donc l'upsert user en DB ci-dessous,
+        // et on ne tente jamais de reply (impossible sur ce type d'interaction).
+        if (interaction.isAutocomplete()) {
+            const started = Date.now();
+            try {
+                const cmd = interaction.client.commands.get(interaction.commandName);
+                if (!cmd?.autocomplete) return;
+
+                await cmd.autocomplete(interaction);
+            } catch (err) {
+                console.error(`Autocomplete: /${interaction.commandName} a échoué après ${Date.now() - started}ms:`, err);
             }
+            return;
+        }
+
+        // DB USER
+        try {
+            if (interaction.user) {
+                let user = await findUserById(interaction.user.id);
+                if (!user) {
+                    user = await upsertUser(interaction.user.id, interaction.user.username);
+                }
+            }
+        } catch (err) {
+            console.error('Error during user upsert:', err);
         }
 
         // HANDLE INTERACTION
@@ -21,14 +42,6 @@ export default {
 
                 await safeDefer(interaction, {ephemeral: false});
                 await cmd.execute(interaction);
-                return;
-            }
-
-            if (interaction.isAutocomplete()) {
-                const cmd = interaction.client.commands.get(interaction.commandName);
-                if (!cmd?.autocomplete) return;
-
-                await cmd.autocomplete(interaction);
                 return;
             }
 
