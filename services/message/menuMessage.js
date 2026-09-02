@@ -26,7 +26,7 @@ export async function renderMenu(restaurant, menu = null) {
 
     const embedMenu = new EmbedBuilder()
         .setColor(parseInt(config.visuals.colors.primary) ?? 0xFFF)
-        .setTitle('Menu du ' + renderDate(menu?.date ?? renderDate(new Date())))
+        .setTitle('Menu du ' + renderDate(menu?.date ?? new Date()))
         .setDescription(formatMenu(menu))
         .setTimestamp()
         .setFooter({

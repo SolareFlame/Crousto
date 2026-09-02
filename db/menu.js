@@ -64,7 +64,7 @@ export async function findMenuByrId(rId, mealName, isoDate) {
     if (!isoDate) throw new Error('isoDate requis (YYYY-MM-DD)');
 
     const ttl = Number(config.db_cache.menu_validity_time);
-    const threshold = new Date(Date.now() - ttl * 1000);
+    const threshold = new Date(Date.now() - ttl * 60 * 1000); // ttl en minutes
 
     const start = new Date(`${isoDate}T00:00:00.000Z`);
     const end   = new Date(`${isoDate}T00:00:00.000Z`);

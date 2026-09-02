@@ -52,7 +52,7 @@ export function findAllRestaurants() {
  */
 export async function findRestaurantBySourceId(rSourceId) {
     const ttl = Number(config.db_cache.restaurant_validity_time);
-    const threshold = new Date(Date.now() - ttl * 1000);
+    const threshold = new Date(Date.now() - ttl * 60 * 1000); // ttl en minutes
 
     return prisma.restaurant.findUnique({
         where: { sourceId: parseInt(rSourceId), updatedAt: { gte: threshold } },
@@ -64,7 +64,7 @@ export async function findRestaurantBySourceId(rSourceId) {
 
 export async function findRestaurantById(rId) {
     const ttl = Number(config.db_cache.restaurant_validity_time);
-    const threshold = new Date(Date.now() - ttl * 1000);
+    const threshold = new Date(Date.now() - ttl * 60 * 1000); // ttl en minutes
 
     return prisma.restaurant.findUnique({
         where: { id: rId, updatedAt: { gte: threshold } },
