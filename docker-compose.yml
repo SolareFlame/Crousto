@@ -4,12 +4,64 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-crousto}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD manquant dans .env}
       POSTGRES_DB: ${POSTGRES_DB:-crousto}
+      TZ: ${TZ:-Europe/Paris}
     ports:
-      - "5432:5432"
+      # Lié à la loopback uniquement : accessible pour `prisma studio` /
+      # `migrate` depuis l'hôte, mais pas exposé sur le réseau.
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-crousto} -d ${POSTGRES_DB:-crousto}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: crousto-bot:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Dans le réseau compose l'hôte de la base est `db`, pas `localhost`.
+      # Cette valeur écrase donc volontairement le DATABASE_URL du .env.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-crousto}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-crousto}
+      DISCORD_TOKEN: ${DISCORD_TOKEN:?DISCORD_TOKEN manquant dans .env}
+      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
+      DEV_GUILD_ID: ${DEV_GUILD_ID}
+      TZ: ${TZ:-Europe/Paris}
+    labels:
+      # Seuls les conteneurs portant ce label sont surveillés par Watchtower
+      com.centurylinklabs.watchtower.enable: "true"
+    stop_grace_period: 20s
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      TZ: ${TZ:-Europe/Paris}
+    # --label-enable : n'agit que sur les conteneurs explicitement marqués
+    # --cleanup      : supprime les anciennes images après mise à jour
+    # --interval 300 : vérifie le registre toutes les 5 min
+    command: --label-enable --cleanup --interval 300
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
 
 volumes:
   postgres_data:
